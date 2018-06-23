@@ -1,23 +1,17 @@
 {
     "name": "Blog Roma Volkov",
     "description": "Blog Roma Volkov",
-    "keywords": ["yii2", "framework", "blog", "Blog Roma Volkov"],
-    "homepage": "",
+    "keywords": ["Roma Volkov", "yii2", "framework", "blog"],
+    "homepage": "http://www.roma.sss/",
     "type": "project",
     "license": "BSD-3-Clause",
-    "support": {
-        "issues": "",
-        "forum": "",
-        "wiki": "",
-        "irc": "",
-        "source": ""
-    },
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=7.1",
         "yiisoft/yii2": "~2.0.6",
         "yiisoft/yii2-bootstrap": "~2.0.0",
-        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0"
+        "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
+        "bower-asset/font-awesome": "^4.7"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
