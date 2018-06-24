@@ -2,12 +2,13 @@
 
 namespace frontend\tests\unit\models;
 
+use PHPUnit\Framework\TestResult;
 use Yii;
-use frontend\models\PasswordResetRequestForm;
+use frontend\forms\PasswordResetRequestForm;
 use common\fixtures\UserFixture as UserFixture;
-use common\models\User;
+use common\entities\User;
 
-class PasswordResetRequestFormTest extends \Codeception\Test\Unit
+ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
 {
     /**
      * @var \frontend\tests\UnitTester
@@ -19,7 +20,7 @@ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
     {
         $this->tester->haveFixtures([
             'user' => [
-                'class' => UserFixture::className(),
+                'class' => UserFixture::class,
                 'dataFile' => codecept_data_dir() . 'user.php'
             ]
         ]);
@@ -56,4 +57,30 @@ class PasswordResetRequestFormTest extends \Codeception\Test\Unit
         expect($emailMessage->getTo())->hasKey($model->email);
         expect($emailMessage->getFrom())->hasKey(Yii::$app->params['supportEmail']);
     }
-}
+
+     /**
+      * Count elements of an object
+      * @link http://php.net/manual/en/countable.count.php
+      * @return int The custom count as an integer.
+      * </p>
+      * <p>
+      * The return value is cast to an integer.
+      * @since 5.1.0
+      */
+     public function count()
+     {
+         // TODO: Implement count() method.
+     }
+
+     /**
+      * Runs a test and collects its result in a TestResult instance.
+      *
+      * @param TestResult $result
+      *
+      * @return TestResult
+      */
+     public function run(TestResult $result = null)
+     {
+         // TODO: Implement run() method.
+     }
+ }
