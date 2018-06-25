@@ -36,10 +36,15 @@ class SignupForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return[];
+    }
+
+
     /**
-     * Signs user up.
-     *
-     * @return User|null the saved model or null if saving fails
+     * @return User|null|static
+     * @throws \yii\base\Exception
      */
     public function signup()
     {
@@ -47,11 +52,7 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
+        $user = User::signup($this->username, $this->email, $this->password);
         
         return $user->save() ? $user : null;
     }

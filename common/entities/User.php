@@ -24,36 +24,54 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
+
     const STATUS_ACTIVE = 10;
 
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return '{{%user}}';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
+    }
+    /**
+     * @param $username
+     * @param $email
+     * @param $password
+     * @return static
+     * @throws \yii\base\Exception
+     */
+    public static function signup(string $username, string $email, string $password): self
+    {
+        $user = new static();
+        $user->username = $username;
+        $user->email = $email;
+        $user->setPassword($password);
+        $user->created_at = time();
+        $user->status = self::STATUS_ACTIVE;
+        $user->generateAuthKey();
+        return $user;
+
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->status = self::STATUS_ACTIVE;
     }
 
     /**
@@ -153,10 +171,10 @@ class User extends ActiveRecord implements IdentityInterface
         return Yii::$app->security->validatePassword($password, $this->password_hash);
     }
 
+
     /**
-     * Generates password hash from password and sets it to the model
-     *
-     * @param string $password
+     * @param $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password)
     {
@@ -165,14 +183,17 @@ class User extends ActiveRecord implements IdentityInterface
 
     /**
      * Generates "remember me" authentication key
+     * @throws \yii\base\Exception
      */
     public function generateAuthKey()
     {
         $this->auth_key = Yii::$app->security->generateRandomString();
     }
 
+
     /**
      * Generates new password reset token
+     * @throws \yii\base\Exception
      */
     public function generatePasswordResetToken()
     {
