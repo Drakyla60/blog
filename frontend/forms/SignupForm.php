@@ -1,6 +1,7 @@
 <?php
 namespace frontend\forms;
 
+use Yii;
 use yii\base\Model;
 
 /**
@@ -37,7 +38,11 @@ class SignupForm extends Model
 
     public function attributeLabels()
     {
-        return[];
+        return [
+            'username' => Yii::t('app', 'Login'),
+            'email' => Yii::t('app', 'Email'),
+            'password' => Yii::t('app', 'Password'),
+        ];
     }
 
 
