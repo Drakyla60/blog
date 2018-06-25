@@ -2,6 +2,7 @@
 namespace frontend\controllers;
 
 use common\models\BlogTags;
+use frontend\services\auth\SignUpService;
 use Yii;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -115,24 +116,23 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
+
     /**
-     * Signs user up.
-     *
-     * @return mixed
+     * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+        $form = new SignupForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            $user = (new SignUpService())->signup($form);
                 if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
                 }
-            }
         }
 
         return $this->render('signup', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
