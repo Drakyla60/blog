@@ -1,6 +1,4 @@
 <?php
-namespace  common\bootstrap;
-
 /**
  * Created by PhpStorm.
  * User: Roma Volkov
@@ -8,8 +6,14 @@ namespace  common\bootstrap;
  * Date: 6/24/2018
  * Time: 1:39 PM
  */
+namespace  common\bootstrap;
+
+use frontend\services\auth\PasswordResetService;
+use frontend\services\contact\ContactService;
+use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;
+use yii\mail\MailerInterface;
 
 class SetUp implements BootstrapInterface
 {
@@ -20,6 +24,16 @@ class SetUp implements BootstrapInterface
      */
     public function bootstrap($app)
     {
-        // TODO: Implement bootstrap() method.
+        $container = Yii::$container;
+
+        $container->setSingleton(PasswordResetService::class);
+
+        $container->setSingleton(ContactService::class, [], [
+           $app->params['adminEmail']
+        ]);
+
+        $container->setSingleton(MailerInterface::class, function () use ($app) {
+            return $app->mailer;
+        });
     }
 }
