@@ -15,12 +15,25 @@ use DomainException;
 use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
 use Yii;
+use yii\mail\MailerInterface;
 
 class PasswordResetService
 {
     public $email;
+    /**
+     * @var MailerInterface
+     */
+    private $mailer;
 
+    /**
+     * PasswordResetService constructor.
+     * @param MailerInterface $mailer
+     */
+    public function __construct(MailerInterface $mailer)
+    {
 
+        $this->mailer = $mailer;
+    }
     /**
      * @param PasswordResetRequestForm $form
      * @throws \yii\base\Exception
@@ -44,7 +57,7 @@ class PasswordResetService
             throw new \RuntimeException('Saving error');
         }
 
-        $sent = Yii::$app
+        $sent = $this
             ->mailer
             ->compose(
                 ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],

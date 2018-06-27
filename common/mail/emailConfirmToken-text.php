@@ -1,4 +1,11 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: Roma Volkov
+ * Email: Drakyla60@gmail.com
+ * Date: 6/27/2018
+ * Time: 9:17 PM
+ */
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -6,10 +13,9 @@ use yii\helpers\Html;
 
 $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
 ?>
-<div class="password-reset">
-    <p>Hello <?= Html::encode($user->username) ?>,</p>
 
-    <p>Follow the link below to reset your password:</p>
+Hello <?= $user->username ?>,
 
-    <p><?= Html::a(Html::encode($resetLink), $resetLink) ?></p>
-</div>
+Follow the link below to confirm your email:
+
+<p><?= $resetLink ?></p>

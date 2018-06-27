@@ -10,7 +10,6 @@ namespace frontend\services\contact;
 
 use frontend\forms\ContactForm;
 use RuntimeException;
-use Yii;
 use yii\mail\MailerInterface;
 
 class ContactService
@@ -26,7 +25,7 @@ class ContactService
      * @param $adminEmail
      * @param MailerInterface $mailer
      */
-    public function __construct( $adminEmail, MailerInterface $mailer)
+    public function __construct($adminEmail, MailerInterface $mailer)
     {
         $this->adminEmail = $adminEmail;
         $this->mailer = $mailer;
