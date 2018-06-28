@@ -7,11 +7,11 @@
  * Time: 1:16 PM
  */
 
-namespace frontend\services\auth;
+namespace core\useServices\auth;
 
-use common\entities\User;
-use common\forms\LoginForm;
-use common\repositories\UserRepository;
+use core\entities\User;
+use core\forms\auth\LoginForm;
+use core\repositories\UserRepository;
 
 class AuthService
 {
@@ -22,8 +22,8 @@ class AuthService
     }
 
     /**
-     * @param LoginForm $form
-     * @return User
+     * @param \core\forms\auth\LoginForm $form
+     * @return \core\entities\User
      */
     public function auth(LoginForm $form): User
     {

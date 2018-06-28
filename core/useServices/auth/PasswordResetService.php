@@ -7,14 +7,12 @@
  * Time: 1:59 PM
  */
 
-namespace frontend\services\auth;
+namespace core\useServices\auth;
 
-
-use common\entities\User;
-use common\repositories\UserRepository;
+use core\repositories\UserRepository;
 use DomainException;
-use frontend\forms\PasswordResetRequestForm;
-use frontend\forms\ResetPasswordForm;
+use core\forms\auth\PasswordResetRequestForm;
+use core\forms\auth\ResetPasswordForm;
 use Yii;
 use yii\mail\MailerInterface;
 
@@ -41,7 +39,7 @@ class PasswordResetService
         $this->userRepository = $userRepository;
     }
     /**
-     * @param PasswordResetRequestForm $form
+     * @param \core\forms\auth\PasswordResetRequestForm $form
      * @throws \yii\base\Exception
      */
     public function request(PasswordResetRequestForm $form): void
@@ -79,7 +77,7 @@ class PasswordResetService
     }
     /**
      * @param string $token
-     * @param ResetPasswordForm $form
+     * @param \core\forms\auth\ResetPasswordForm $form
      * @throws \yii\base\Exception
      */
     public function reset(string $token, ResetPasswordForm $form): void

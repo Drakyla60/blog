@@ -7,7 +7,7 @@
  * Time: 11:06 AM
  */
 
-namespace common\repositories;
+namespace core\repositories;
 
 
 use DomainException;

@@ -2,23 +2,21 @@
 namespace frontend\controllers;
 
 use Yii;
-use common\models\BlogTags;
-use frontend\services\auth\AuthService;
-use frontend\services\auth\PasswordResetService;
-use frontend\services\auth\SignUpService;
-use frontend\services\contact\ContactService;
+use core\useServices\auth\AuthService;
+use core\useServices\auth\PasswordResetService;
+use core\useServices\auth\SignUpService;
+use core\useServices\contact\ContactService;
 use yii\web\BadRequestHttpException;
-use yii\web\Controller;
-use common\forms\LoginForm;
-use frontend\forms\PasswordResetRequestForm;
-use frontend\forms\ResetPasswordForm;
-use frontend\forms\SignupForm;
-use frontend\forms\ContactForm;
+use core\forms\auth\LoginForm;
+use core\forms\auth\PasswordResetRequestForm;
+use core\forms\auth\ResetPasswordForm;
+use core\forms\auth\SignupForm;
+use core\forms\ContactForm;
 
 /**
  * Site controller
  */
-class SiteController extends Controller
+class SiteController extends BasesController
 {
     private $passwordResetService;
     private $contactService;
@@ -29,7 +27,7 @@ class SiteController extends Controller
      * SiteController constructor.
      * @param string $id
      * @param $module
-     * @param PasswordResetService $passwordResetService
+     * @param \core\useServices\auth\PasswordResetService $passwordResetService
      * @param ContactService $contactService
      * @param SignUpService $signUpService
      * @param AuthService $authService
@@ -72,10 +70,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $blogs = BlogTags::find()->all();
-        return $this->render('index', [
-            'blogs' => $blogs
-        ]);
+        return $this->render('index', []);
     }
 
     /**

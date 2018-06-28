@@ -6,11 +6,11 @@
  * Date: 6/25/2018
  * Time: 12:57 PM
  */
-namespace frontend\services\auth;
+namespace core\useServices\auth;
 
-use common\entities\User;
-use common\repositories\UserRepository;
-use frontend\forms\SignupForm;
+use core\entities\User;
+use core\repositories\UserRepository;
+use core\forms\auth\SignupForm;
 use Yii;
 use yii\mail\MailerInterface;
 

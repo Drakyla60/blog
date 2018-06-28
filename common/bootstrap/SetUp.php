@@ -8,8 +8,8 @@
  */
 namespace  common\bootstrap;
 
-use frontend\services\auth\PasswordResetService;
-use frontend\services\contact\ContactService;
+use core\useServices\auth\PasswordResetService;
+use core\useServices\contact\ContactService;
 use Yii;
 use yii\base\Application;
 use yii\base\BootstrapInterface;

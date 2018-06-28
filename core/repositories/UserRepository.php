@@ -6,10 +6,9 @@
  * Date: 6/28/2018
  * Time: 11:05 AM
  */
-namespace common\repositories;
+namespace core\repositories;
 
-use common\entities\User;
-
+use core\entities\User;
 /**
  * Class UserRepository
  * @package common\repositories
@@ -74,7 +73,7 @@ class UserRepository
 
     /**
      * @param array $condition
-     * @return array|User|\yii\db\ActiveRecord
+     * @return array|\core\entities\User|\yii\db\ActiveRecord
      */
     public function getBy(array $condition)
     {

@@ -6,9 +6,9 @@
  * Date: 6/25/2018
  * Time: 6:15 PM
  */
-namespace frontend\services\contact;
+namespace core\useServices\contact;
 
-use frontend\forms\ContactForm;
+use core\forms\ContactForm;
 use RuntimeException;
 use yii\mail\MailerInterface;
 

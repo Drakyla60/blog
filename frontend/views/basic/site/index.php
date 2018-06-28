@@ -1,7 +1,6 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $blogs common\models\BlogTags */
 
 $this->title = 'Frontend';
 ?>
@@ -22,9 +21,6 @@ $this->title = 'Frontend';
                         <div class="entry-meta-data">
                             <span class="author"><i class="fa fa-user"></i>&nbsp; by: <a href="#">Admin</a></span>
                             <span class="cat"> <i class="fa fa-folder"></i>&nbsp;
-                                <?php foreach ($blogs as $blog):?>
-                                    <a href="#"><?=$blog->name?></a>
-                                <?php endforeach;?>
                             </span>
                             <span class="comment-count"> <i class="fa fa-comment"></i>&nbsp; 3 </span>
                             <span class="date"><i class="fa fa-calendar"></i>&nbsp; 2015-08-05</span>
