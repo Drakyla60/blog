@@ -54,11 +54,14 @@ class SignUpService
             $form->password
         );
 
-        $this->save($user);
+        $this->userRepository->save($user);
 
         $sent = $this->mailer
             ->compose(
-                ['html' => 'emailConfirmToken-html', 'text' => 'emailConfirmToken-text'],
+                [
+                    'html' => 'auth/signup/confirm-html',
+                    'text' => 'auth/signup/confirm-text'
+                 ],
                 ['user' =>$user]
             )
             ->setTo($form->email)
@@ -81,15 +84,10 @@ class SignUpService
 
         $user = $this->userRepository->getByEmailConfirmToken($token);
         $user->confirmSignUp();
-        $this->save($user);
+        $this->userRepository->save($user);
     }
 
 
 
-    public function save( User $user): void
-    {
-        if (!$user->save()) {
-            throw new \RuntimeException('Saving error.');
-        }
-    }
+
 }
