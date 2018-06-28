@@ -11,6 +11,7 @@ namespace frontend\services\auth;
 
 
 use common\entities\User;
+use common\repositories\UserRepository;
 use DomainException;
 use frontend\forms\PasswordResetRequestForm;
 use frontend\forms\ResetPasswordForm;
@@ -24,15 +25,20 @@ class PasswordResetService
      * @var MailerInterface
      */
     private $mailer;
-
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
     /**
      * PasswordResetService constructor.
      * @param MailerInterface $mailer
+     * @param UserRepository $userRepository
      */
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, UserRepository $userRepository)
     {
 
         $this->mailer = $mailer;
+        $this->userRepository = $userRepository;
     }
     /**
      * @param PasswordResetRequestForm $form
@@ -40,27 +46,16 @@ class PasswordResetService
      */
     public function request(PasswordResetRequestForm $form): void
     {
-        /* @var $user User */
-        $user = User::findOne([
-            'status' => User::STATUS_ACTIVE,
-            'email' => $form->email,
-        ]);
-
-
-        if (!$user) {
-            throw new DomainException('User is not found.');
-        }
-
+        $user = $this->userRepository->getByEmail($form->email);
         $user->requestPasswordReset();
-
-        if (!$user->save()) {
-            throw new \RuntimeException('Saving error');
-        }
-
+        $this->userRepository->save($user);
         $sent = $this
             ->mailer
             ->compose(
-                ['html' => 'passwordResetToken-html', 'text' => 'passwordResetToken-text'],
+                [
+                    'html' => 'passwordResetToken-html',
+                    'text' => 'passwordResetToken-text'
+                ],
                 ['user' => $user]
             )
             ->setTo($user->email)
@@ -70,7 +65,6 @@ class PasswordResetService
             throw new \RuntimeException('Sending Error');
         }
     }
-
     /**
      * @param $token
      */
@@ -79,12 +73,10 @@ class PasswordResetService
         if (empty($token) || !is_string($token)) {
             throw new DomainException('Password reset token cannon be blank');
         }
-        if (!User::findByPasswordResetToken($token)) {
+        if (!$this->userRepository->existsByPasswordResetToken($token)) {
             throw new DomainException('Wrong password reset token');
         }
     }
-
-
     /**
      * @param string $token
      * @param ResetPasswordForm $form
@@ -92,18 +84,8 @@ class PasswordResetService
      */
     public function reset(string $token, ResetPasswordForm $form): void
     {
-        $user = User::findByPasswordResetToken($token);
-
-        if (!$user) {
-            throw new DomainException('User is not found. ');
-        }
-
+        $user = $this->userRepository->getByPasswordResetToken($token);
         $user->resetPassword($form->password);
-
-        if (!$user->save()) {
-            throw new \RuntimeException('Saving Error');
-        }
+        $this->userRepository->save($user);
     }
-
-
 }

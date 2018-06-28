@@ -9,6 +9,7 @@
 namespace frontend\services\auth;
 
 use common\entities\User;
+use common\repositories\UserRepository;
 use frontend\forms\SignupForm;
 use Yii;
 use yii\helpers\VarDumper;
@@ -24,15 +25,21 @@ class SignUpService
      * @var MailerInterface
      */
     private $mailer;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
     /**
      * SignUpService constructor.
      * @param MailerInterface $mailer
+     * @param UserRepository $userRepository
      */
-    public function __construct(MailerInterface $mailer)
+    public function __construct(MailerInterface $mailer, UserRepository $userRepository)
     {
 
         $this->mailer = $mailer;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -48,9 +55,7 @@ class SignUpService
             $form->password
         );
 
-        if (!$user->save()) {
-            throw new \RuntimeException('Saving error.');
-        }
+        $this->save($user);
 
         $sent = $this->mailer
             ->compose(
@@ -75,16 +80,17 @@ class SignUpService
             throw new \DomainException('Empty confirm token');
         }
 
-        $user = User::findOne(['email_confirm_token' => $token]);
-
-        if (!$user) {
-            throw new \DomainException('User is not found');
-        }
-
+        $user = $this->userRepository->getByEmailConfirmToken($token);
         $user->confirmSignUp();
+        $this->save($user);
+    }
 
+
+
+    public function save( User $user): void
+    {
         if (!$user->save()) {
-            throw new \RuntimeException('Saving error');
+            throw new \RuntimeException('Saving error.');
         }
     }
 }

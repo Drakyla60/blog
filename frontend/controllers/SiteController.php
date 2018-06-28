@@ -19,20 +19,9 @@ use frontend\forms\ContactForm;
  */
 class SiteController extends Controller
 {
-
-    /**
-     * @var PasswordResetService
-     */
     private $passwordResetService;
-    /**
-     * @var ContactService
-     */
     private $contactService;
-    /**
-     * @var SignUpService
-     */
     private $signUpService;
-
     /**
      * SiteController constructor.
      * @param string $id
