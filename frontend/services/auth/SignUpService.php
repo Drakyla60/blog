@@ -12,7 +12,6 @@ use common\entities\User;
 use common\repositories\UserRepository;
 use frontend\forms\SignupForm;
 use Yii;
-use yii\helpers\VarDumper;
 use yii\mail\MailerInterface;
 
 /**

@@ -40,16 +40,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * @return array
-     */
-//    public function rules()
-//    {
-//        return [
-//            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-//            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-//        ];
-//    }
-    /**
      * @param $username
      * @param $email
      * @param $password

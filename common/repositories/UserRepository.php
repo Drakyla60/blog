@@ -17,6 +17,16 @@ use common\entities\User;
 class UserRepository
 {
     /**
+     * @param $value
+     * @return array|User|\yii\db\ActiveRecord
+     */
+    public function findByUsernameOrEmail($value)
+    {
+        return User::find()->andWhere(['or', ['username' => $value], ['email' => $value]])->one();
+    }
+
+
+    /**
      * @param string $token
      * @return User
      */

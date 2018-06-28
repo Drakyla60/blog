@@ -23,9 +23,6 @@ class SiteController extends Controller
     private $passwordResetService;
     private $contactService;
     private $signUpService;
-    /**
-     * @var AuthService
-     */
     private $authService;
 
     /**
@@ -35,9 +32,10 @@ class SiteController extends Controller
      * @param PasswordResetService $passwordResetService
      * @param ContactService $contactService
      * @param SignUpService $signUpService
+     * @param AuthService $authService
      * @param array $config
      */
-    public function __construct(string $id, $module,
+    public function __construct($id, $module,
                                 PasswordResetService $passwordResetService,
                                 ContactService $contactService,
                                 SignUpService $signUpService,
