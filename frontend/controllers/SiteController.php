@@ -48,6 +48,11 @@ class SiteController extends BasesController
         return $this->render('about');
     }
 
+    public function actionLogin()
+    {
+        return $this->redirect('/login');
+    }
+
 
 
 
