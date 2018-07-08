@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use core\helpers\UserHelper;
+use core\entities\User;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\forms\UserSearch */
@@ -22,13 +25,33 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
                     'id',
-                    'created_at:datetime',
-                    'updated_at:datetime',
+                    [
+                        'attribute' => 'created_at',
+                        'filter' => DatePicker::widget([
+                            'model' => $searchModel,
+                            'attribute' => 'date_from',
+                            'attribute2' => 'date_to',
+                            'type' => DatePicker::TYPE_RANGE,
+                            'separator' => '-',
+                            'pluginOptions' => [
+                                'todayHighlight' => true,
+                                'autoclose'=>true,
+                                'format' => 'yyyy-mm-dd',
+                            ],
+                        ]),
+                        'format' => 'datetime',
+                    ],
                     'username',
                     'email:email',
-                    'status',
+                    [
+                        'attribute' => 'status',
+                        'format' => 'raw',
+                        'filter' => UserHelper::statusList(),
+                        'value' => function (User $user) {
+                            return UserHelper::statusLabel($user->status);
+                        },
+                    ],
                     ['class' => 'yii\grid\ActionColumn'],
                 ],
             ]); ?>

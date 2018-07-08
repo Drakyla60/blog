@@ -5,7 +5,6 @@ namespace backend\controllers;
 use Yii;
 use core\entities\User;
 use backend\forms\UserSearch;
-use backend\controllers\BasesController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -21,7 +20,7 @@ class UserController extends BasesController
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
