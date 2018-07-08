@@ -17,6 +17,13 @@ return [
             'csrfParam' => '_csrf-backend',
             'cookieValidationKey' => $params['cookieValidationKey'],
         ],
+//		'view' => [
+//         'theme' => [
+//             'pathMap' => [
+//                '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
+//             ],
+//         ],
+//		],
         'user' => [
             'identityClass' => 'core\entities\User',
             'enableAutoLogin' => true,
