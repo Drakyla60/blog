@@ -12,14 +12,40 @@ $this->title = Yii::t('app', 'Cabinet');
 $this->params['breadcrumbs'][] = $this->title;
 
 use kartik\sidenav\SideNav;
-
+/** @var \core\entities\User $user */
 
 ?>
 <div class="raw">
-    <div class="cabinet-content col-md-9">
+    <div class="cabinet-content col-md-8">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>
+                    Інформація
+                </th>
+            </tr>
+            </thead>
+            <tbody class="tab-pane">
+            <tr >
+                <th>Ваш ID</th>
+                <th>Логін</th>
+                <th>E-mail</th>
+                <th>Дата реєстрації</th>
+                <th>Дата останього оновлення</th>
+            </tr>
+            <tr>
+                <th># <?= $user->id ?></th>
+                <th><?= $user->username ?></th>
+                <th><?= $user->email ?></th>
+                <th><?= date('Y-m-d', $user->created_at) ?></th>
+                <th><?= date('Y-m-d', $user->updated_at) ?></th>
+            </tr>
+
+            </tbody>
+        </table>
 
     </div>
-    <div class="cabinet-menu col-md-3">
+    <div class="cabinet-menu col-md-4">
         <?php echo SideNav::widget([
             'type' => SideNav::TYPE_INFO,
             'heading' => 'Настройки',

@@ -3,21 +3,28 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model core\entities\User */
+/* @var $user core\entities\User */
 
-$this->title = Yii::t('app', 'Update User: {nameAttribute}', [
-    'nameAttribute' => $model->id,
+$this->title = Yii::t('app', 'Update User: #{nameAttribute}', [
+    'nameAttribute' => $user->id,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Users'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $user->id, 'url' => ['view', 'id' => $user->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="user-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php $form = \yii\widgets\ActiveForm::begin(); ?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php \yii\widgets\ActiveForm::end(); ?>
 
 </div>

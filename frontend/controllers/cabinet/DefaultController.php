@@ -10,6 +10,7 @@
 namespace frontend\controllers\cabinet;
 
 
+use core\entities\User;
 use frontend\controllers\BasesController;
 use yii\filters\AccessControl;
 
@@ -33,7 +34,11 @@ class DefaultController extends BasesController
 
     public function actionIndex()
     {
-
-        return $this->render('index');
+        $user_id = \Yii::$app->user->id;
+        $user = User::findOne($user_id);
+        return $this->render('index',
+            [
+                'user' => $user,
+            ]);
     }
 }

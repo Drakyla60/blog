@@ -24,6 +24,10 @@ class UserRepository
         return User::find()->andWhere(['or', ['username' => $value], ['email' => $value]])->one();
     }
 
+    public function get($id): User
+    {
+        return $this->getBy(['id' => $id]);
+    }
 
     /**
      * @param string $token

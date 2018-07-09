@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use core\forms\manage\User\UserCreateForm;
+use core\forms\manage\User\UserEditForm;
+use core\useServices\manage\UserManageService;
 use Yii;
 use core\entities\User;
 use backend\forms\UserSearch;
@@ -14,8 +17,23 @@ use yii\filters\VerbFilter;
 class UserController extends BasesController
 {
     /**
-     * @inheritdoc
+     * @var UserManageService
      */
+    private $userManageService;
+
+    /**
+     * UserController constructor.
+     * @param $id
+     * @param $module
+     * @param UserManageService $userManageService
+     * @param array $config
+     */
+    public function __construct($id, $module, UserManageService $userManageService, $config = [])
+    {
+        parent::__construct($id, $module, $config = []);
+        $this->userManageService = $userManageService;
+    }
+
     public function behaviors()
     {
         return [
@@ -56,21 +74,26 @@ class UserController extends BasesController
         ]);
     }
 
+
     /**
-     * Creates a new User model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
+     * @return string|\yii\web\Response
+     * @throws \yii\base\Exception
      */
     public function actionCreate()
     {
-        $model = new User();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $form = new UserCreateForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $user = $this->userManageService->create($form);
+                return $this->redirect(['view', 'id' => $user->id]);
+            } catch (\DomainException $e)
+            {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
-
         return $this->render('create', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
@@ -83,23 +106,32 @@ class UserController extends BasesController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $user = $this->findModel($id);
+        $form = new UserEditForm($user);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->userManageService->edit($user->id, $form);
+                return $this->redirect(['view', 'id' => $user->id]);
+            } catch (\DomainException $e)
+            {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => $form,
+            'user' => $user
         ]);
     }
 
+
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

@@ -38,7 +38,7 @@ class UserHelper
                 $class = 'label label-success';
                 break;
             case User::STATUS_DELETED:
-                $class = 'label label-error';
+                $class = 'label label-danger';
                 break;
             default:
                 $class = 'label label-default';
