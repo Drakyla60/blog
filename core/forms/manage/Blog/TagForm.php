@@ -33,7 +33,7 @@ class TagForm extends Model
     public function rules()
     {
         return [
-            [['name','slug'], 'required'],
+            [['name'], 'required'],
             [['name','slug'], 'string', 'max' => 255],
             ['slug', 'match', 'pattern' => '#^[a-z0-9_-]*$#s'],
             [

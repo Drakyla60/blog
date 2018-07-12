@@ -13,6 +13,7 @@ namespace core\useServices\manage\Blog;
 use core\entities\Blog\Tag;
 use core\forms\manage\Blog\TagForm;
 use core\ropositories\Blog\TagRepository;
+use yii\helpers\Inflector;
 
 /**
  * Class TagManageService
@@ -43,7 +44,7 @@ class TagManageService
     {
         $tag = Tag::create(
             $tagForm->name,
-            $tagForm->slug
+            $tagForm->slug ?: Inflector::slug($tagForm->name)
         );
         $this->tagRepository->save($tag);
         return $tag;
@@ -58,7 +59,7 @@ class TagManageService
         $tag = $this->tagRepository->get($id);
         $tag->edit(
             $tagForm->name,
-            $tagForm->slug
+            $tagForm->slug ?: Inflector::slug($tagForm->name)
         );
         $this->tagRepository->save($tag);
     }
