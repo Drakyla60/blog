@@ -8,7 +8,7 @@
  */
 namespace core\repositories;
 
-use core\entities\User;
+use core\entities\User\User;
 /**
  * Class UserRepository
  * @package common\repositories
@@ -40,7 +40,7 @@ class UserRepository
 
     /**
      * @param string $email
-     * @return User
+     * @return \core\entities\User\User
      */
     public function getByEmail(string $email): User
     {
@@ -77,7 +77,7 @@ class UserRepository
 
     /**
      * @param array $condition
-     * @return array|\core\entities\User|\yii\db\ActiveRecord
+     * @return array|\core\entities\User\User|\yii\db\ActiveRecord
      */
     public function getBy(array $condition)
     {

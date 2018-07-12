@@ -6,7 +6,7 @@ return [
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'bootstrap' => [
-        'common\bootstrap\SetUp',
+        //'common\bootstrap\SetUp',
     ],
     'components' => [
 //        'cache' => [

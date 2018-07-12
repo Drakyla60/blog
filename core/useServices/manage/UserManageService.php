@@ -10,7 +10,7 @@
 namespace core\useServices\manage;
 
 
-use core\entities\User;
+use core\entities\User\User;
 use core\forms\manage\User\UserCreateForm;
 use core\forms\manage\User\UserEditForm;
 use core\repositories\UserRepository;

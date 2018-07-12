@@ -8,7 +8,7 @@
  */
 namespace core\helpers;
 
-use core\entities\User;
+use core\entities\User\User;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $user core\entities\User */
+/* @var $user \core\entities\User\User */
 
 $this->title = Yii::t('app', 'Update User: #{nameAttribute}', [
     'nameAttribute' => $user->id,

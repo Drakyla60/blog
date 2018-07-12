@@ -12,37 +12,23 @@ $this->title = Yii::t('app', 'Cabinet');
 $this->params['breadcrumbs'][] = $this->title;
 
 use kartik\sidenav\SideNav;
-/** @var \core\entities\User $user */
+/** @var \core\entities\User\User $user */
 
 ?>
 <div class="raw">
     <div class="cabinet-content col-md-8">
-        <table class="table">
-            <thead>
-            <tr>
-                <th>
-                    Інформація
-                </th>
-            </tr>
-            </thead>
-            <tbody class="tab-pane">
-            <tr >
-                <th>Ваш ID</th>
-                <th>Логін</th>
-                <th>E-mail</th>
-                <th>Дата реєстрації</th>
-                <th>Дата останього оновлення</th>
-            </tr>
-            <tr>
-                <th># <?= $user->id ?></th>
-                <th><?= $user->username ?></th>
-                <th><?= $user->email ?></th>
-                <th><?= date('Y-m-d', $user->created_at) ?></th>
-                <th><?= date('Y-m-d', $user->updated_at) ?></th>
-            </tr>
+	<h1 >Setting</h1>
+	<table id="w0" class="table table-striped table-bordered detail-view">
+		<tbody>
+			<tr><th>Ваш ID</th><td># <?= $user->id ?></td></tr>
+			<tr><th>Логін</th><td><?= $user->username ?></td></tr>
+			<tr><th>Email</th><td><a href="mailto:<?= $user->email ?>"><?= $user->email ?></a></td></tr>
+			<tr><th>Status</th><td>10</td></tr>
+			<tr><th>Дата реєстрації</th><td><?= date('Y-m-d', $user->created_at) ?></td></tr>
+			<tr><th>Дата останього оновлення</th><td><?= date('Y-m-d', $user->updated_at) ?></td></tr>
+		</tbody>
+	</table>
 
-            </tbody>
-        </table>
 
     </div>
     <div class="cabinet-menu col-md-4">

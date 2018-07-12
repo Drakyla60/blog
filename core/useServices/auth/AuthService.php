@@ -9,7 +9,7 @@
 
 namespace core\useServices\auth;
 
-use core\entities\User;
+use core\entities\User\User;
 use core\forms\auth\LoginForm;
 use core\repositories\UserRepository;
 
@@ -23,7 +23,7 @@ class AuthService
 
     /**
      * @param \core\forms\auth\LoginForm $form
-     * @return \core\entities\User
+     * @return \core\entities\User\User
      */
     public function auth(LoginForm $form): User
     {

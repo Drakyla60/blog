@@ -6,7 +6,7 @@ use core\forms\manage\User\UserCreateForm;
 use core\forms\manage\User\UserEditForm;
 use core\useServices\manage\UserManageService;
 use Yii;
-use core\entities\User;
+use core\entities\User\User;
 use backend\forms\UserSearch;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

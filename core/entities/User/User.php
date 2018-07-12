@@ -1,5 +1,5 @@
 <?php
-namespace core\entities;
+namespace core\entities\User;
 
 use Yii;
 use yii\base\NotSupportedException;
@@ -145,8 +145,10 @@ class User extends ActiveRecord implements IdentityInterface
         return static::findOne(['id' => $id,
                                 'status' => self::STATUS_ACTIVE]);
     }
+
     /**
      * {@inheritdoc}
+     * @throws NotSupportedException
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {

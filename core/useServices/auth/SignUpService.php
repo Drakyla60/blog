@@ -8,7 +8,7 @@
  */
 namespace core\useServices\auth;
 
-use core\entities\User;
+use core\entities\User\User;
 use core\repositories\UserRepository;
 use core\forms\auth\SignupForm;
 use Yii;

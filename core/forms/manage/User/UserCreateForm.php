@@ -10,7 +10,7 @@
 namespace core\forms\manage\User;
 
 
-use core\entities\User;
+use core\entities\User\User;
 use yii\base\Model;
 
 class UserCreateForm extends Model

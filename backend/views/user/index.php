@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use core\helpers\UserHelper;
-use core\entities\User;
+use core\entities\User\User;
 use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
@@ -25,9 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-                    'id',
+                    [
+                        'attribute' => 'id',
+                        'label' => 'ID'
+                    ],
                     [
                         'attribute' => 'created_at',
+                        'label' => 'Пошук по даті',
                         'filter' => DatePicker::widget([
                             'model' => $searchModel,
                             'attribute' => 'date_from',
@@ -42,10 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]),
                         'format' => 'datetime',
                     ],
-                    'username',
-                    'email:email',
+                    [
+                        'attribute' => 'username',
+                        'label' => 'Логін'
+                    ],
+                    [
+                        'attribute' => 'email',
+                        'format' => 'email',
+                        'label' => 'Електронна пошта'
+                    ],
                     [
                         'attribute' => 'status',
+                        'label' => 'Статус',
                         'format' => 'raw',
                         'filter' => UserHelper::statusList(),
                         'value' => function (User $user) {
@@ -54,7 +66,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     ['class' => 'yii\grid\ActionColumn'],
                 ],
-            ]); ?>
+            ]);
+
+            ?>
 
         </div>
     </div>

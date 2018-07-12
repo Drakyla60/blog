@@ -10,7 +10,10 @@ return [
     'id' => 'blog-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'common\bootstrap\SetUp',
+    ],
     'modules' => [],
     'components' => [
         'request' => [
@@ -25,7 +28,7 @@ return [
 //         ],
 //		],
         'user' => [
-            'identityClass' => 'core\entities\User',
+            'identityClass' => 'core\entities\User\User',
             'enableAutoLogin' => true,
             'identityCookie' => [
                 'name' => '_identity',

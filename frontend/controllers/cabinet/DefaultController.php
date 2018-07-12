@@ -10,7 +10,7 @@
 namespace frontend\controllers\cabinet;
 
 
-use core\entities\User;
+use core\entities\User\User;
 use frontend\controllers\BasesController;
 use yii\filters\AccessControl;
 
