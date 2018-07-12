@@ -51,6 +51,19 @@ class TagManageService
 
     /**
      * @param $id
+     * @param TagForm $tagForm
+     */
+    public function edit($id, TagForm $tagForm): void
+    {
+        $tag = $this->tagRepository->get($id);
+        $tag->edit(
+            $tagForm->name,
+            $tagForm->slug
+        );
+        $this->tagRepository->save($tag);
+    }
+    /**
+     * @param $id
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
