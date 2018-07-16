@@ -12,6 +12,7 @@ namespace core\forms\manage\Blog;
 
 use core\entities\Blog\Type;
 use core\forms\manage\MetaForm;
+use shop\validators\SlugValidator;
 use yii\base\Model;
 
 /**
@@ -61,7 +62,7 @@ class TypeForm extends Model
         return [
             [['name', 'slug'], 'required'],
             [['name', 'slug'], 'string', 'max' => 255],
-            ['slug', 'match', 'pattern' => '#^[a-z0-9_-]*$#s'],
+            ['slug', SlugValidator::class],
             [
                 ['name', 'slug'],
                 'unique',
