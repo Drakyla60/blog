@@ -10,9 +10,9 @@
 namespace core\entities\Blog;
 
 
+use core\entities\behaviors\MetaBehavior;
 use core\entities\Meta;
 use yii\db\ActiveRecord;
-use yii\helpers\Json;
 
 /**
  * Class Type
@@ -24,32 +24,22 @@ use yii\helpers\Json;
  */
 class Type extends ActiveRecord
 {
-    /**
-     * @var
-     */
-    public $meta;
 
+    public $meta;
 
     public static function tableName(): string
     {
         return '{{%blog_type}}';
     }
 
-    public function afterFind(): void
+    /**
+     * @return array
+     */
+    public function behaviors(): array
     {
-        $meta = Json::decode($this->getAttribute('meta_json'));
-        $this->meta = new Meta($meta['title'], $meta['description'], $meta['keywords']);
-        parent::afterFind();
-    }
-
-    public function beforeSave($insert)
-    {
-        $this->setAttribute('meta_json', Json::encode([
-            'title' => $this->meta->title,
-            'description' => $this->meta->description,
-            'keywords' => $this->meta->keywords
-        ]));
-        return parent::beforeSave($insert);
+        return [
+            MetaBehavior::class,
+        ];
     }
 
     /**
