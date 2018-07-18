@@ -19,6 +19,7 @@ use yii\db\ActiveRecord;
 /**
  * Class Category
  * @package core\entities\Blog
+ * @property  $id
  * @property  $name
  * @property  $slug
  * @property  $title
