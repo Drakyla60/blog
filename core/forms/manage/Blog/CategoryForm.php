@@ -11,6 +11,7 @@ namespace core\forms\manage\Blog;
 use core\entities\Blog\Category;
 use core\forms\CompositeForm;
 use core\forms\manage\MetaForm;
+use shop\validators\SlugValidator;
 
 /**
  * @property MetaForm $meta
