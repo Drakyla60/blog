@@ -12,6 +12,7 @@ namespace core\entities\Blog\Post;
 
 use core\entities\behaviors\MetaBehavior;
 use core\entities\Blog\Category;
+use core\entities\Blog\Tag;
 use core\entities\Blog\Type;
 use core\entities\Meta;
 use DomainException;
@@ -28,11 +29,31 @@ use yii\web\UploadedFile;
  * @property integer $category_id
  * @property integer $brand_id
  * @property integer $rating
- * @property mixed categoryAssignments
- * @package core\entities\Blog\Post
+ * @property integer $main_photo_id
+ * @property mixed $status
+ *
+ * @property Meta $meta
+ * @property Type $type
+ * @property Category $category
+ * @property CategoryAssignment[] $categoryAssignments
+ * @property Category[] $categories
+ * @property TagAssignment[] $tagAssignments
+ * @property Tag[] $tags
+ * @property RelatedAssignment[] $relatedAssignments
+ * @property Photo[] $photos
+ * @property Photo $mainPhoto
  */
 class Post extends ActiveRecord
 {
+    /**
+     *
+     */
+    const STATUS_DRAFT = 0;
+    /**
+     *
+     */
+    const STATUS_ACTIVE = 1;
+
     /**
      * @return string
      */
@@ -65,7 +86,6 @@ class Post extends ActiveRecord
         ];
     }
 
-    public $meta;
     /**
      * @param $brandId
      * @param $categoryId
@@ -93,6 +113,52 @@ class Post extends ActiveRecord
         $this->category_id = $categoryId;
     }
 
+    /**
+     *
+     */
+    public function activate(): void
+    {
+        if ($this->isActive()) {
+            throw new \DomainException('Product is already active.');
+        }
+        $this->status = self::STATUS_ACTIVE;
+    }
+
+    /**
+     *
+     */
+    public function draft(): void
+    {
+        if ($this->isDraft()) {
+            throw new \DomainException('Product is already draft.');
+        }
+        $this->status = self::STATUS_DRAFT;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->status == self::STATUS_ACTIVE;
+    }
+
+
+    /**
+     * @return bool
+     */
+    public function isDraft(): bool
+    {
+        return $this->status == self::STATUS_DRAFT;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoTitle(): string
+    {
+        return $this->meta->title ?: $this->name;
+    }
     /**
      * @param $id
      */
@@ -204,6 +270,56 @@ class Post extends ActiveRecord
         $this->updatePhotos([]);
     }
 
+    /**
+     * @param $id
+     */
+    public function movePhotoUp($id): void
+    {
+        $photos = $this->photos;
+        foreach ($photos as $i => $photo) {
+            if ($photo->isIdEqualTo($id)) {
+                if ($prev = $photos[$i - 1] ?? null) {
+                    $photos[$i - 1] = $photo;
+                    $photos[$i] = $prev;
+                    $this->updatePhotos($photos);
+                }
+                return;
+            }
+        }
+        throw new \DomainException('Photo is not found.');
+    }
+
+    /**
+     * @param $id
+     */
+    public function movePhotoDown($id): void
+    {
+        $photos = $this->photos;
+        foreach ($photos as $i => $photo) {
+            if ($photo->isIdEqualTo($id)) {
+                if ($next = $photos[$i + 1] ?? null) {
+                    $photos[$i] = $next;
+                    $photos[$i + 1] = $photo;
+                    $this->updatePhotos($photos);
+                }
+                return;
+            }
+        }
+        throw new \DomainException('Photo is not found.');
+    }
+
+    /**
+     * @param array $photos
+     */
+    private function updatePhotos(array $photos): void
+    {
+        foreach ($photos as $i => $photo) {
+            $photo->setSort($i);
+        }
+        $this->photos = $photos;
+        $this->populateRelation('mainPhoto', reset($photos));
+    }
+
 
 
     /**
@@ -211,7 +327,7 @@ class Post extends ActiveRecord
      */
     public function getType(): ActiveQuery
     {
-        return $this->hasOne(Type::class, ['id' => 'brand_id']);
+        return $this->hasOne(Type::class, ['id' => 'type_id']);
     }
 
     /**
@@ -222,11 +338,51 @@ class Post extends ActiveRecord
         return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
     public function getCategoryAssignments(): ActiveQuery
     {
-        return $this->hasOne(CategoryAssignment::class, ['product_id' => 'id']);
+        return $this->hasOne(CategoryAssignment::class, ['post_id' => 'id']);
     }
 
+    /**
+     * @return ActiveQuery
+     */
+    public function getCategories(): ActiveQuery
+    {
+        return $this->hasMany(Category::class, ['id' => 'category_id'])->via('categoryAssignments');
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTagAssignments(): ActiveQuery
+    {
+        return $this->hasMany(TagAssignment::class, ['post_id' => 'id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getTags(): ActiveQuery
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('tagAssignments');
+    }
+    /**
+     * @return ActiveQuery
+     */
+    public function getPhotos(): ActiveQuery
+    {
+        return $this->hasOne(Photo::class, ['post_id' => 'id'])->orderBy('sort');
+    }
+    /**
+     * @return ActiveQuery
+     */
+    public function getMainPhoto(): ActiveQuery
+    {
+        return $this->hasOne(Photo::class, ['id' => 'main_photo_id']);
+    }
 
 }
 

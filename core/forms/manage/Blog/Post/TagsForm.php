@@ -37,7 +37,7 @@ class TagsForm extends Model
     public function __construct(Post $post = null, $config = [])
     {
         if ($post) {
-            $this->existing = ArrayHelper::getColumn($post->tagAsigments, 'tag_id');
+            $this->existing = ArrayHelper::getColumn($post->tagAssignments, 'tag_id');
         }
         parent::__construct($config);
     }
@@ -58,6 +58,6 @@ class TagsForm extends Model
      */
     public function getNewNames(): array
     {
-        return preg_split('#\s*,\s*#i');
+        return array_map('trim',preg_split('#\s*,\s*#i', $this->textNew));
     }
 }

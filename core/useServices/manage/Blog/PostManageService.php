@@ -10,6 +10,7 @@ namespace core\useServices\manage\Blog;
 
 use core\entities\Blog\Post\Post;
 use core\entities\Meta;
+use core\forms\manage\Blog\Post\PhotosForm;
 use core\forms\manage\Blog\Post\PostCreateForm;
 use core\ropositories\Blog\CategoryRepository;
 use core\ropositories\Blog\PostRepository;
@@ -101,6 +102,71 @@ class PostManageService
 
     /**
      * @param $id
+     */
+    public function activate($id): void
+    {
+        $post = $this->postRepository->get($id);
+        $post->activate();
+        $this->postRepository->save($post);
+    }
+
+    /**
+     * @param $id
+     */
+    public function draft($id): void
+    {
+        $product = $this->postRepository->get($id);
+        $product->draft();
+        $this->postRepository->save($product);
+    }
+
+    /**
+     * @param $id
+     * @param PhotosForm $form
+     */
+    public function addPhotos($id, PhotosForm $form): void
+    {
+        $product = $this->postRepository->get($id);
+        foreach ($form->files as $file) {
+            $product->addPhoto($file);
+        }
+        $this->postRepository->save($product);
+    }
+
+    /**
+     * @param $id
+     * @param $photoId
+     */
+    public function movePhotoUp($id, $photoId): void
+    {
+        $product = $this->postRepository->get($id);
+        $product->movePhotoUp($photoId);
+        $this->postRepository->save($product);
+    }
+
+    /**
+     * @param $id
+     * @param $photoId
+     */
+    public function movePhotoDown($id, $photoId): void
+    {
+        $product = $this->postRepository->get($id);
+        $product->movePhotoDown($photoId);
+        $this->postRepository->save($product);
+    }
+
+    /**
+     * @param $id
+     * @param $photoId
+     */
+    public function removePhoto($id, $photoId): void
+    {
+        $product = $this->postRepository->get($id);
+        $product->removePhoto($photoId);
+        $this->postRepository->save($product);
+    }
+    /**
+     * @param $id
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
@@ -109,6 +175,8 @@ class PostManageService
         $post =  $this->postRepository->get($id);
         $this->postRepository->remove($post);
     }
+
+
 }
 
 

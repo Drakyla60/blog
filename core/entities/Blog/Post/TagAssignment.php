@@ -4,28 +4,27 @@
  * User: Roma Volkov
  * Email: Drakyla60@gmail.com
  * Date: 7/25/2018
- * Time: 3:25 PM
+ * Time: 7:27 PM
  */
 
 namespace core\entities\Blog\Post;
 
 use yii\db\ActiveRecord;
 
-
 /**
  * @property integer $product_id;
- * @property integer $category_id;
+ * @property integer $tag_id;
  */
-class CategoryAssignment extends ActiveRecord
+class TagAssignment extends ActiveRecord
 {
     /**
-     * @param $categoryId
-     * @return CategoryAssignment
+     * @param $tagId
+     * @return TagAssignment
      */
-    public static function create($categoryId): self
+    public static function create($tagId): self
     {
         $assignment = new static();
-        $assignment->category_id = $categoryId;
+        $assignment->tag_id = $tagId;
         return $assignment;
     }
 
@@ -33,9 +32,9 @@ class CategoryAssignment extends ActiveRecord
      * @param $id
      * @return bool
      */
-    public function isForCategory($id): bool
+    public function isForTag($id): bool
     {
-        return $this->category_id == $id;
+        return $this->tag_id == $id;
     }
 
     /**
@@ -43,6 +42,6 @@ class CategoryAssignment extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%blog_category_assignments}}';
+        return '{{%blog_tag_assignments}}';
     }
 }

@@ -18,6 +18,7 @@ use core\forms\manage\MetaForm;
  * @property CategoriesForm categories
  * @property PhotosForm photos
  * @property TagsForm tags
+ * @property mixed|\yii\base\Model $typeId
  */
 class PostCreateForm extends CompositeForm
 {
