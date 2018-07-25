@@ -13,6 +13,7 @@ use core\entities\Blog\Tag;
 use core\entities\Meta;
 use core\forms\manage\Blog\Post\PhotosForm;
 use core\forms\manage\Blog\Post\PostCreateForm;
+use core\forms\manage\Blog\Post\PostEditForm;
 use core\ropositories\Blog\CategoryRepository;
 use core\ropositories\Blog\PostRepository;
 use core\ropositories\Blog\TagRepository;
@@ -119,6 +120,55 @@ class PostManageService
         $this->postRepository->save($post);
 
         return $post;
+    }
+
+    /**
+     * @param $id
+     * @param PostEditForm $postEditForm
+     * @throws \Throwable
+     */
+    public function edit($id, PostEditForm $postEditForm): void
+    {
+        $post = $this->postRepository->get($id);
+        $type = $this->typeRepository->get($postEditForm->typeId);
+        $category = $this->categoryRepository->get($postEditForm->categories->main);
+
+        $post->edit(
+            $type->id,
+            $postEditForm->name,
+            new Meta(
+                $postEditForm->meta->title,
+                $postEditForm->meta->description,
+                $postEditForm->meta->keywords
+            )
+        );
+
+        $post->changeMainCategory($category->id);
+
+        $this->transactionManager->wrap(function () use ($post, $postEditForm) {
+
+            $post->revokeCategories();
+            $post->revokeTags();
+            $this->postRepository->save($post);
+
+            foreach ($postEditForm->categories->others as $otherId) {
+                $category = $this->categoryRepository->get($otherId);
+                $post->assignCategory($category->id);
+            }
+
+            foreach ($postEditForm->tags->existing as $tagId) {
+                $tag = $this->tagRepository->get($tagId);
+                $post->assignTag($tag->id);
+            }
+            foreach ($postEditForm->tags->textNew as $tagName) {
+                if (!$tag = $this->tagRepository->findByName($tagName)) {
+                    $tag = Tag::create($tagName, $tagName);
+                    $this->tagRepository->save($tag);
+                }
+                $post->assignTag($tag->id);
+            }
+            $this->postRepository->save($post);
+        });
     }
 
     /**
