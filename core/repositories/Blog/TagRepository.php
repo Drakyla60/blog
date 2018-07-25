@@ -42,6 +42,16 @@ class TagRepository
         }
     }
 
+
+    /**
+     * @param $name
+     * @return Tag|null
+     */
+    public function findByName($name): ?Tag
+    {
+        return Tag::findOne(['name' => $name]);
+    }
+
     /**
      * @param Tag $tag
      * @throws \Throwable

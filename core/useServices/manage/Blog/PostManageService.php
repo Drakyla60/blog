@@ -9,6 +9,7 @@ namespace core\useServices\manage\Blog;
  */
 
 use core\entities\Blog\Post\Post;
+use core\entities\Blog\Tag;
 use core\entities\Meta;
 use core\forms\manage\Blog\Post\PhotosForm;
 use core\forms\manage\Blog\Post\PostCreateForm;
@@ -16,6 +17,7 @@ use core\ropositories\Blog\CategoryRepository;
 use core\ropositories\Blog\PostRepository;
 use core\ropositories\Blog\TagRepository;
 use core\ropositories\Blog\TypeRepository;
+use core\useServices\TransactionManager;
 
 
 /**
@@ -40,6 +42,10 @@ class PostManageService
      * @var TagRepository
      */
     private $tagRepository;
+    /**
+     * @var TransactionManager
+     */
+    private $transactionManager;
 
     /**
      * PostManageService constructor.
@@ -47,23 +53,27 @@ class PostManageService
      * @param TypeRepository $typeRepository
      * @param CategoryRepository $categoryRepository
      * @param TagRepository $tagRepository
+     * @param TransactionManager $transactionManager
      */
     public function __construct(
         PostRepository $postRepository,
         TypeRepository $typeRepository,
         CategoryRepository $categoryRepository,
-        TagRepository $tagRepository
+        TagRepository $tagRepository,
+        TransactionManager $transactionManager
     )
     {
         $this->postRepository = $postRepository;
         $this->typeRepository = $typeRepository;
         $this->categoryRepository = $categoryRepository;
         $this->tagRepository = $tagRepository;
+        $this->transactionManager = $transactionManager;
     }
 
     /**
      * @param PostCreateForm $postCreateForm
      * @return Post
+     * @throws \Throwable
      */
     public function create(PostCreateForm $postCreateForm): Post
     {
@@ -94,6 +104,17 @@ class PostManageService
             $tag = $this->tagRepository->get($tagId);
             $post->assignTag($tag->id);
         }
+
+        $this->transactionManager->wrap(function () use ($postCreateForm, $post) {
+            foreach ($postCreateForm->tags->textNew as $tagName) {
+                if (!$tag = $this->tagRepository->findByName($tagName)) {
+                    $tag = Tag::create($tagName, $tagName);
+                    $this->tagRepository->save($tag);
+                }
+                $post->assignTag($tag->id);
+           }
+           $this->postRepository->save($post);
+        });
 
         $this->postRepository->save($post);
 

@@ -14,14 +14,32 @@ use core\entities\Blog\Tag;
 use shop\validators\SlugValidator;
 use yii\base\Model;
 
+/**
+ * Class TagForm
+ * @package core\forms\manage\Blog
+ */
 class TagForm extends Model
 {
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $slug;
 
+    /**
+     * @var Tag
+     */
     private $_tag;
 
-    public function __construct( Tag $tag = null, $config = [])
+    /**
+     * TagForm constructor.
+     * @param Tag|null $tag
+     * @param array $config
+     */
+    public function __construct(Tag $tag = null, $config = [])
     {
         if ($tag) {
             $this->name = $tag->name;
@@ -31,6 +49,9 @@ class TagForm extends Model
         parent::__construct($config);
     }
 
+    /**
+     * @return array
+     */
     public function rules()
     {
         return [
