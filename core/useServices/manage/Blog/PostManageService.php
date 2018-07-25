@@ -13,6 +13,7 @@ use core\entities\Meta;
 use core\forms\manage\Blog\Post\PostCreateForm;
 use core\ropositories\Blog\CategoryRepository;
 use core\ropositories\Blog\PostRepository;
+use core\ropositories\Blog\TagRepository;
 use core\ropositories\Blog\TypeRepository;
 
 
@@ -34,22 +35,29 @@ class PostManageService
      * @var CategoryRepository
      */
     private $categoryRepository;
+    /**
+     * @var TagRepository
+     */
+    private $tagRepository;
 
     /**
      * PostManageService constructor.
      * @param PostRepository $postRepository
      * @param TypeRepository $typeRepository
      * @param CategoryRepository $categoryRepository
+     * @param TagRepository $tagRepository
      */
     public function __construct(
         PostRepository $postRepository,
         TypeRepository $typeRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        TagRepository $tagRepository
     )
     {
         $this->postRepository = $postRepository;
         $this->typeRepository = $typeRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->tagRepository = $tagRepository;
     }
 
     /**
@@ -71,6 +79,20 @@ class PostManageService
                 $postCreateForm->meta->keywords
             )
         );
+        foreach ($postCreateForm->categories->others as $otherId) {
+            $category = $this->categoryRepository->get($otherId);
+            $post->assignCategory($category->id);
+        }
+
+
+        foreach ($postCreateForm->photos->files as $file) {
+            $post->addPhoto($file);
+        }
+
+        foreach ($postCreateForm->tags->existing as $tagId) {
+            $tag = $this->tagRepository->get($tagId);
+            $post->assignTag($tag->id);
+        }
 
         $this->postRepository->save($post);
 
