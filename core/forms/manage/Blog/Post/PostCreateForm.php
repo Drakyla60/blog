@@ -25,7 +25,7 @@ class PostCreateForm extends CompositeForm
     /**
      * @var
      */
-    public $brandId;
+    public $typeId;
     /**
      * @var
      */
@@ -54,9 +54,9 @@ class PostCreateForm extends CompositeForm
     public function rules(): array
     {
         return [
-            [['brandId', 'name'], 'required'],
+            [['typeId', 'name'], 'required'],
             [['name'], 'string', 'max' => 255],
-            [['brandId'], 'integer'],
+            [['typeId'], 'integer'],
         ];
     }
 

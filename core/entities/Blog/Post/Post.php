@@ -27,7 +27,7 @@ use yii\web\UploadedFile;
  * @property integer $created_at
  * @property string $name
  * @property integer $category_id
- * @property integer $brand_id
+ * @property integer $type_id
  * @property integer $rating
  * @property integer $main_photo_id
  * @property mixed $status
@@ -71,7 +71,7 @@ class Post extends ActiveRecord
             MetaBehavior::class,
             [
                 'class' => SaveRelationsBehavior::class,
-                'relations' => ['categoryAssignments', 'values'],
+                'relations' => ['categoryAssignments', 'tagAssignments','photos'],
             ],
         ];
     }
@@ -87,16 +87,16 @@ class Post extends ActiveRecord
     }
 
     /**
-     * @param $brandId
+     * @param $typeId
      * @param $categoryId
      * @param $name
      * @param Meta $meta
      * @return Post
      */
-    public static function create($brandId, $categoryId, $name, Meta $meta): self
+    public static function create($typeId, $categoryId, $name, Meta $meta): self
     {
         $post = new static();
-        $post->brand_id = $brandId;
+        $post->type_id = $typeId;
         $post->category_id = $categoryId;
         $post->name = $name;
         $post->meta = $meta;
@@ -104,6 +104,17 @@ class Post extends ActiveRecord
         return $post;
     }
 
+    /**
+     * @param $typeId
+     * @param $name
+     * @param Meta $meta
+     */
+    public function edit($typeId, $name, Meta $meta): void
+    {
+        $this->type_id = $typeId;
+        $this->name = $name;
+        $this->meta = $meta;
+    }
 
     /**
      * @param $categoryId
@@ -343,7 +354,7 @@ class Post extends ActiveRecord
      */
     public function getCategoryAssignments(): ActiveQuery
     {
-        return $this->hasOne(CategoryAssignment::class, ['post_id' => 'id']);
+        return $this->hasMany(CategoryAssignment::class, ['post_id' => 'id']);
     }
 
     /**
@@ -374,7 +385,7 @@ class Post extends ActiveRecord
      */
     public function getPhotos(): ActiveQuery
     {
-        return $this->hasOne(Photo::class, ['post_id' => 'id'])->orderBy('sort');
+        return $this->hasMany(Photo::class, ['post_id' => 'id'])->orderBy('sort');
     }
     /**
      * @return ActiveQuery

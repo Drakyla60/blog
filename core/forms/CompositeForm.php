@@ -13,6 +13,10 @@ namespace core\forms;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class CompositeForm
+ * @package core\forms
+ */
 abstract class CompositeForm extends Model
 {
     /**
@@ -32,23 +36,17 @@ abstract class CompositeForm extends Model
      */
     public function load($data, $formName = null): bool
     {
-        $success = parent::load($data,$formName);
+        $success = parent::load($data, $formName);
         foreach ($this->forms as $name => $form) {
             if (is_array($form)) {
-                foreach ($form as $itemName => $itemForm) {
-                    $success = $this->loadInternal($data, $itemForm, $formName, $itemName) && $success;
-                }
+                $success = Model::loadMultiple($form, $data, $formName === null ? null : $name) && $success;
             } else {
-                $success = $form->load($data, $formName ? null : $name) && $success;
+                $success = $form->load($data, $formName !== '' ? null : $name) && $success;
             }
         }
         return $success;
     }
 
-    private function loadInternal(array $data, Model $form, $formName, $name): bool
-    {
-        return $form->load($data, $formName ? null : $name);
-    }
     /**
      * @param null $attributeNames
      * @param bool $clearErrors
@@ -56,23 +54,68 @@ abstract class CompositeForm extends Model
      */
     public function validate($attributeNames = null, $clearErrors = true): bool
     {
-        $parentNames = array_filter($attributeNames, 'is_string');
+        $parentNames = $attributeNames !== null ? array_filter((array)$attributeNames, 'is_string') : null;
         $success = parent::validate($parentNames, $clearErrors);
-        foreach ($this->forms as $name => $item) {
-            if (is_array($item)) {
-                foreach ($item as $itemName => $itemForm) {
-                    $innerNames = ArrayHelper::getValue($attributeNames, $itemName);
-                    $success = $itemForm->validate($innerNames, $clearErrors) && $success;
-                }
+        foreach ($this->forms as $name => $form) {
+            if (is_array($form)) {
+                $success = Model::validateMultiple($form) && $success;
             } else {
-
-                $innerNames = ArrayHelper::getValue($attributeNames, $name);
-                $success = $item->validate($innerNames, $clearErrors) && $success;
+                $innerNames = $attributeNames !== null ? ArrayHelper::getValue($attributeNames, $name) : null;
+                $success = $form->validate($innerNames ?: null, $clearErrors) && $success;
             }
         }
         return $success;
     }
 
+    /**
+     * @param null $attribute
+     * @return bool
+     */
+    public function hasErrors($attribute = null): bool
+    {
+        if ($attribute !== null) {
+            return parent::hasErrors($attribute);
+        }
+        if (parent::hasErrors($attribute)) {
+            return true;
+        }
+        foreach ($this->forms as $name => $form) {
+            if (is_array($form)) {
+                foreach ($form as $i => $item) {
+                    if ($item->hasErrors()) {
+                        return true;
+                    }
+                }
+            } else {
+                if ($form->hasErrors()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFirstErrors(): array
+    {
+        $errors = parent::getFirstErrors();
+        foreach ($this->forms as $name => $form) {
+            if (is_array($form)) {
+                foreach ($form as $i => $item) {
+                    foreach ($item->getFirstErrors() as $attribute => $error) {
+                        $errors[$name . '.' . $i . '.' . $attribute] = $error;
+                    }
+                }
+            } else {
+                foreach ($form->getFirstErrors() as $attribute => $error) {
+                    $errors[$name . '.' . $attribute] = $error;
+                }
+            }
+        }
+        return $errors;
+    }
     /**
      * @param string $name
      * @return mixed|Model
