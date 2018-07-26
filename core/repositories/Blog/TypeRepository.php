@@ -7,10 +7,11 @@
  * Time: 6:17 PM
  */
 
-namespace core\ropositories\Blog;
-
+namespace core\repositories\Blog;
 
 use core\entities\Blog\Type;
+use core\repositories\NotFoundException;
+use RuntimeException;
 
 /**
  * Class TypeRepository
@@ -36,7 +37,7 @@ class TypeRepository
     public function save(Type $type): void
     {
         if (!$type->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new RuntimeException('Saving error.');
         }
     }
 
@@ -49,7 +50,7 @@ class TypeRepository
     public function remove(Type $type): void
     {
         if (!$type->delete()) {
-            throw new \RuntimeException('Removing error.');
+            throw new RuntimeException('Removing error.');
         }
     }
 }

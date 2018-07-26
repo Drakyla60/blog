@@ -6,7 +6,7 @@
  * Date: 7/16/2018
  * Time: 6:58 PM
  */
-namespace shop\validators;
+namespace core\validators;
 
 use yii\validators\RegularExpressionValidator;
 

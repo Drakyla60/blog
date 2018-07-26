@@ -11,16 +11,16 @@ namespace core\forms\manage\Blog;
 
 
 use core\entities\Blog\Type;
+use core\forms\CompositeForm;
 use core\forms\manage\MetaForm;
-use shop\validators\SlugValidator;
-use yii\base\Model;
+use core\validators\SlugValidator;
 
 /**
  * Class TypeForm
  * @package core\forms\manage\Blog
  * @property MetaForm $meta
  */
-class TypeForm extends Model
+class TypeForm extends CompositeForm
 {
     /**
      * @var string

@@ -18,6 +18,8 @@ class m180720_115228_create_blog_type_table extends Migration
             'slug' => $this->string()->notNull(),
             'meta_json' => 'JSON NOT NULL',
         ]);
+
+        $this->createIndex('{{%idx-blog_type-slug}}', '{{%blog_type}}', 'slug', true);
     }
 
     /**

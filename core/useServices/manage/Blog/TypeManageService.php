@@ -13,8 +13,12 @@ namespace core\useServices\manage\Blog;
 use core\entities\Blog\Type;
 use core\entities\Meta;
 use core\forms\manage\Blog\TypeForm;
-use core\ropositories\Blog\TypeRepository;
+use core\repositories\Blog\TypeRepository;
 
+/**
+ * Class TypeManageService
+ * @package core\useServices\manage\Blog
+ */
 class TypeManageService
 {
     /**
@@ -31,6 +35,10 @@ class TypeManageService
         $this->typeRepository = $typeRepository;
     }
 
+    /**
+     * @param TypeForm $form
+     * @return Type
+     */
     public function create(TypeForm $form): Type
     {
         $type = Type::create(
@@ -46,6 +54,10 @@ class TypeManageService
         return $type;
     }
 
+    /**
+     * @param $id
+     * @param TypeForm $form
+     */
     public function edit($id, TypeForm $form): void
     {
         $type = $this->typeRepository->get($id);
