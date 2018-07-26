@@ -15,31 +15,48 @@ use core\entities\Meta;
 use yii\base\Behavior;
 use yii\base\Event;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
+/**
+ * Class MetaBehavior
+ * @package core\entities\behaviors
+ */
 class MetaBehavior extends Behavior
 {
+    /**
+     * @var string
+     */
     public $attribute = 'meta';
+    /**
+     * @var string
+     */
     public $jsonAttribute = 'meta_json';
 
-
+    /**
+     * @return array
+     */
     public function events(): array
     {
         return [
             ActiveRecord::EVENT_AFTER_FIND => 'onAfterFind',
-            ActiveRecord::EVENT_AFTER_INSERT =>'onBeforeSave',
-            ActiveRecord::EVENT_AFTER_UPDATE => 'onBeforeSave',
+            ActiveRecord::EVENT_BEFORE_INSERT => 'onBeforeSave',
+            ActiveRecord::EVENT_BEFORE_UPDATE => 'onBeforeSave',
         ];
     }
+
     /**
      * @param Event $event
      */
     public function onAfterFind(Event $event): void
     {
-        /** @var Type $type */
-        $type = $event->sender;
-        $meta = Json::decode($type->getAttribute($this->jsonAttribute));
-        $type->{$this->attribute} = new Meta($meta['title'], $meta['description'], $meta['keywords']);
+        $model = $event->sender;
+        $meta = Json::decode($model->getAttribute($this->jsonAttribute));
+        $model->{$this->attribute} = new Meta(
+            ArrayHelper::getValue($meta, 'title'),
+            ArrayHelper::getValue($meta, 'description'),
+            ArrayHelper::getValue($meta, 'keywords')
+        );
     }
 
     /**
@@ -47,12 +64,11 @@ class MetaBehavior extends Behavior
      */
     public function onBeforeSave(Event $event): void
     {
-        /** @var Type $type */
-        $type = $event->sender;
-        $type->setAttribute($this->jsonAttribute, Json::encode([
-            'title' => $type->{$this->attribute}->title,
-            'description' => $type->{$this->attribute}->description,
-            'keywords' => $type->{$this->attribute}->keywords
+        $model = $event->sender;
+        $model->setAttribute($this->jsonAttribute, Json::encode([
+            'title' => $model->{$this->attribute}->title,
+            'description' => $model->{$this->attribute}->description,
+            'keywords' => $model->{$this->attribute}->keywords,
         ]));
     }
 }

@@ -1,6 +1,6 @@
 <aside class="main-sidebar">
     <section class="sidebar">
-        <?= dmstr\widgets\Menu::widget(
+        <?php echo dmstr\widgets\Menu::widget(
             [
 
                 'items' => [
@@ -10,6 +10,13 @@
 
                             ['label' => 'Селяни', 'icon' => 'users', 'url' => ['/user'],],
                             ['label' => 'Новий Селянин', 'icon' => 'user', 'url' => ['/user/create'],],
+                        ],
+                    ],
+                    ['label' => 'Типи блога', 'icon' => 'book', 'url' => ['#'],
+                        'items' => [
+
+                            ['label' => 'Типи', 'icon' => 'book', 'url' => ['/type'],],
+                            ['label' => 'Новий Тип блога', 'icon' => 'book', 'url' => ['/type/create'],],
                         ],
                     ],
 
