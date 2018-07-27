@@ -13,7 +13,9 @@ namespace core\useServices\manage\Blog;
 use core\entities\Blog\Category;
 use core\entities\Meta;
 use core\forms\manage\Blog\CategoryForm;
-use core\ropositories\Blog\CategoryRepository;
+use core\repositories\Blog\CategoryRepository;
+use core\repositories\Blog\PostRepository;
+use DomainException;
 
 /**
  * Class CategoryManageService
@@ -25,14 +27,20 @@ class CategoryManageService
      * @var CategoryRepository
      */
     private $categoryRepository;
+    /**
+     * @var PostRepository
+     */
+    private $postRepository;
 
     /**
      * CategoryManageService constructor.
      * @param CategoryRepository $categoryRepository
+     * @param PostRepository $postRepository
      */
-    public function __construct(CategoryRepository $categoryRepository)
+    public function __construct(CategoryRepository $categoryRepository, PostRepository $postRepository)
     {
         $this->categoryRepository = $categoryRepository;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -94,6 +102,9 @@ class CategoryManageService
     {
         $category = $this->categoryRepository->get($id);
         $this->assertIsNotRoot($category);
+        if ($this->postRepository->existsByMainCategory($category->id)) {
+            throw new DomainException('Unable to remove category with products. ');
+        }
         $this->categoryRepository->remove($category);
     }
 
@@ -103,7 +114,7 @@ class CategoryManageService
     private function assertIsNotRoot(Category $category): void
     {
         if ($category->isRoot()) {
-            throw new \DomainException('Unable to manage the root category.');
+            throw new DomainException('Unable to manage the root category.');
         }
     }
 }

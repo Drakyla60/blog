@@ -11,7 +11,8 @@ namespace core\forms\manage\Blog;
 use core\entities\Blog\Category;
 use core\forms\CompositeForm;
 use core\forms\manage\MetaForm;
-use shop\validators\SlugValidator;
+use core\validators\SlugValidator;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property MetaForm $meta
@@ -83,6 +84,16 @@ class CategoryForm extends CompositeForm
                 'filter' => $this->_category ? ['<>', 'id', $this->_category->id] : null
             ],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function parentCategoriesList(): array
+    {
+        return ArrayHelper::map(Category::find()->orderBy('lft')->asArray()->all(), 'id', function (array $category){
+           return ($category['depth'] > 1 ? str_repeat('-- ', $category['depth'] - 1) . ' ' : ''). $category['name'];
+        });
     }
 
     /**

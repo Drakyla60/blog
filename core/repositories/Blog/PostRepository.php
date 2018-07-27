@@ -7,7 +7,7 @@
  * Time: 10:16 PM
  */
 
-namespace core\ropositories\Blog;
+namespace core\repositories\Blog;
 
 
 use core\entities\Blog\Post\Post;
@@ -16,7 +16,7 @@ use RuntimeException;
 
 /**
  * Class PostRepository
- * @package core\ropositories\Blog
+ * @package core\repositories\Blog
  */
 class PostRepository
 {

@@ -7,15 +7,16 @@
  * Time: 8:53 PM
  */
 
-namespace core\ropositories\Blog;
+namespace core\repositories\Blog;
 
 
 use core\entities\Blog\Category;
 use core\repositories\NotFoundException;
+use RuntimeException;
 
 /**
  * Class CategoryRepository
- * @package core\ropositories\Blog
+ * @package core\repositories\Blog
  */
 class CategoryRepository
 {
@@ -37,7 +38,7 @@ class CategoryRepository
     public function save(Category $category): void
     {
         if (!$category->save()) {
-            throw new \RuntimeException('Saving error.');
+            throw new RuntimeException('Saving error.');
         }
     }
 
@@ -50,7 +51,7 @@ class CategoryRepository
     public function remove(Category $category): void
     {
         if (!$category->delete()) {
-            throw new \RuntimeException('Removing error.');
+            throw new RuntimeException('Removing error.');
         }
     }
 }
