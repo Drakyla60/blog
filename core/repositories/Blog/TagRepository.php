@@ -7,7 +7,7 @@
  * Time: 1:41 PM
  */
 
-namespace core\ropositories\Blog;
+namespace core\repositories\Blog;
 
 
 use core\entities\Blog\Tag;

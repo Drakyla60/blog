@@ -11,7 +11,7 @@ namespace core\forms\manage\Blog;
 
 
 use core\entities\Blog\Tag;
-use shop\validators\SlugValidator;
+use core\validators\SlugValidator;
 use yii\base\Model;
 
 /**

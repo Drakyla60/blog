@@ -19,6 +19,13 @@
                             ['label' => 'Новий Тип блога', 'icon' => 'book', 'url' => ['/blog/type/create'],],
                         ],
                     ],
+                    ['label' => 'Теги блога', 'icon' => 'book', 'url' => ['#'],
+                        'items' => [
+
+                            ['label' => 'Теги', 'icon' => 'book', 'url' => ['/blog/tag'],],
+                            ['label' => 'Новий Тег блога', 'icon' => 'book', 'url' => ['/blog/tag/create'],],
+                        ],
+                    ],
 
                     ['label' => 'Настройки Блога', 'options' => ['class' => 'header']],
                     ['label' => 'Генератор', 'icon' => 'file-code-o', 'url' => ['/gii']],

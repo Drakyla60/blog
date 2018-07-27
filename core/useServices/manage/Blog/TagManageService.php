@@ -12,7 +12,7 @@ namespace core\useServices\manage\Blog;
 
 use core\entities\Blog\Tag;
 use core\forms\manage\Blog\TagForm;
-use core\ropositories\Blog\TagRepository;
+use core\repositories\Blog\TagRepository;
 use yii\helpers\Inflector;
 
 /**

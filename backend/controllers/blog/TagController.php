@@ -3,44 +3,45 @@
  * Created by PhpStorm.
  * User: Roma Volkov
  * Email: Drakyla60@gmail.com
- * Date: 7/26/2018
- * Time: 8:46 PM
+ * Date: 7/27/2018
+ * Time: 12:54 PM
  */
+
 namespace backend\controllers\blog;
 
 
 use backend\controllers\BasesController;
-use backend\forms\Blog\TypeSearch;
-use core\entities\Blog\Type;
-use core\forms\manage\Blog\TypeForm;
-use core\useServices\manage\Blog\TypeManageService;
+use backend\forms\Blog\TagSearch;
+use core\entities\Blog\Tag;
+use core\forms\manage\Blog\TagForm;
+use core\useServices\manage\Blog\TagManageService;
 use DomainException;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 /**
- * Class TypeController
+ * Class TagController
  * @package blog
  */
-class TypeController extends BasesController
+class TagController extends BasesController
 {
     /**
-     * @var TypeManageService
+     * @var TagManageService
      */
-    private $typeManageService;
+    private $tagManageService;
 
     /**
-     * TypeController constructor.
+     * TagController constructor.
      * @param $id
      * @param $module
-     * @param TypeManageService $typeManageService
+     * @param TagManageService $tagManageService
      * @param array $config
      */
-    public function __construct($id, $module, TypeManageService $typeManageService, $config = [])
+    public function __construct($id, $module, TagManageService $tagManageService, $config = [])
     {
         parent::__construct($id, $module, $config);
-        $this->typeManageService = $typeManageService;
+        $this->tagManageService = $tagManageService;
     }
 
     /**
@@ -52,7 +53,7 @@ class TypeController extends BasesController
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                  'delete' => ['POST']
+                    'delete' => ['POST']
                 ],
             ],
         ];
@@ -63,12 +64,12 @@ class TypeController extends BasesController
      */
     public function actionIndex()
     {
-        $searchModel = new TypeSearch();
+        $searchModel = new TagSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-           'searchModel' => $searchModel,
-           'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -80,7 +81,7 @@ class TypeController extends BasesController
     public function actionView($id)
     {
         return $this->render('view', [
-            'type' => $this->findModel($id),
+            'tag' => $this->findModel($id),
         ]);
     }
 
@@ -90,10 +91,10 @@ class TypeController extends BasesController
      */
     public function actionCreate()
     {
-        $form = new TypeForm();
+        $form = new TagForm();
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $type = $this->typeManageService->create($form);
+                $type = $this->tagManageService->create($form);
                 return $this->redirect(['view', 'id' => $type->id]);
             }catch (DomainException $exception) {
                 Yii::$app->errorHandler->logException($exception);
@@ -101,7 +102,7 @@ class TypeController extends BasesController
             }
         }
         return $this->render('create', [
-           'model' => $form
+            'model' => $form
         ]);
     }
 
@@ -112,21 +113,21 @@ class TypeController extends BasesController
      */
     public function actionUpdate($id)
     {
-        $type = $this->findModel($id);
+        $tag = $this->findModel($id);
 
-        $form = new TypeForm($type);
+        $form = new TagForm($tag);
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             try {
-                $this->typeManageService->edit($type->id, $form);
-                return $this->redirect(['view', 'id' => $type->id]);
-            } catch (\DomainException $exception) {
+                $this->tagManageService->edit($tag->id, $form);
+                return $this->redirect(['view', 'id' => $tag->id]);
+            } catch (DomainException $exception) {
                 Yii::$app->errorHandler->logException($exception);
                 Yii::$app->session->setFlash('error', $exception->getMessage());
             }
         }
         return $this->render('update', [
             'model' => $form,
-            'brand' => $type,
+            'brand' => $tag,
         ]);
     }
 
@@ -140,8 +141,8 @@ class TypeController extends BasesController
     public function actionDelete($id)
     {
         try {
-            $this->typeManageService->remove($id);
-        } catch (\DomainException $exception) {
+            $this->tagManageService->remove($id);
+        } catch (DomainException $exception) {
             Yii::$app->errorHandler->logException($exception);
             Yii::$app->session->setFlash('error', $exception->getMessage());
         }
@@ -150,15 +151,14 @@ class TypeController extends BasesController
 
     /**
      * @param $id
-     * @return Type
+     * @return Tag
      * @throws NotFoundHttpException
      */
-    protected function findModel($id): Type
+    protected function findModel($id): Tag
     {
-        if (($model = Type::findOne($id)) !== null) {
+        if (($model = Tag::findOne($id)) !== null) {
             return $model;
         }
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
 }
