@@ -149,6 +149,25 @@ class CategoryController extends BasesController
 
     /**
      * @param $id
+     * @return \yii\web\Response
+     */
+    public function actionMoveUp($id)
+    {
+        $this->categoryManageService->moveUp($id);
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * @param $id
+     * @return \yii\web\Response
+     */
+    public function actionMoveDown($id)
+    {
+        $this->categoryManageService->moveDown($id);
+        return $this->redirect(['index']);
+    }
+    /**
+     * @param $id
      * @return Category
      * @throws NotFoundHttpException
      */

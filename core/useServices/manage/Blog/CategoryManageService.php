@@ -37,7 +37,10 @@ class CategoryManageService
      * @param CategoryRepository $categoryRepository
      * @param PostRepository $postRepository
      */
-    public function __construct(CategoryRepository $categoryRepository, PostRepository $postRepository)
+    public function __construct(
+        CategoryRepository $categoryRepository,
+        PostRepository $postRepository
+    )
     {
         $this->categoryRepository = $categoryRepository;
         $this->postRepository = $postRepository;
@@ -91,6 +94,32 @@ class CategoryManageService
         }
         $this->categoryRepository->save($category);
 
+    }
+
+    /**
+     * @param $id
+     */
+    public function moveUp($id): void
+    {
+        $category = $this->categoryRepository->get($id);
+        $this->assertIsNotRoot($category);
+        if ($prev = $category->prev){
+            $category->insertBefore($prev);
+        }
+        $this->categoryRepository->save($category);
+    }
+
+    /**
+     * @param $id
+     */
+    public function moveDown($id): void
+    {
+        $category = $this->categoryRepository->get($id);
+        $this->assertIsNotRoot($category);
+        if ($next = $category->next){
+            $category->insertAfter($next);
+        }
+        $this->categoryRepository->save($category);
     }
 
     /**

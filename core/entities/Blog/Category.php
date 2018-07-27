@@ -17,16 +17,21 @@ use paulzi\nestedsets\NestedSetsBehavior;
 use yii\db\ActiveRecord;
 
 /**
- * Class Category
- * @package core\entities\Blog
- * @property  $id
- * @property  $name
- * @property  $slug
- * @property  $title
- * @property  $description
- * @property  Meta $meta
+ * @property integer $id
+ * @property string $name
+ * @property string $slug
+ * @property string $title
+ * @property string $description
+ * @property integer $lft
+ * @property integer $rgt
+ * @property integer $depth
+ * @property Meta $meta
  *
  * @property Category $parent
+ * @property Category[] $parents
+ * @property Category[] $children
+ * @property Category $prev
+ * @property Category $next
  * @mixin NestedSetsBehavior
  */
 class Category extends ActiveRecord
