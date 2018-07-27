@@ -14,6 +14,8 @@ use core\entities\Blog\Type;
 use core\entities\Meta;
 use core\forms\manage\Blog\TypeForm;
 use core\repositories\Blog\TypeRepository;
+use core\ropositories\Blog\PostRepository;
+use DomainException;
 
 /**
  * Class TypeManageService
@@ -25,14 +27,23 @@ class TypeManageService
      * @var TypeRepository
      */
     private $typeRepository;
+    /**
+     * @var PostRepository
+     */
+    private $postRepository;
 
     /**
      * TypeManageService constructor.
      * @param TypeRepository $typeRepository
+     * @param PostRepository $postRepository
      */
-    public function __construct(TypeRepository $typeRepository)
+    public function __construct(
+        TypeRepository $typeRepository,
+        PostRepository $postRepository
+    )
     {
         $this->typeRepository = $typeRepository;
+        $this->postRepository = $postRepository;
     }
 
     /**
@@ -81,8 +92,11 @@ class TypeManageService
      */
     public function remove($id): void
     {
-        $brand = $this->typeRepository->get($id);
-        $this->typeRepository->remove($brand);
+        $type = $this->typeRepository->get($id);
+        if ($this->postRepository->existsByType($type->id)) {
+            throw new DomainException('Unable to remove type with products.');
+        }
+        $this->typeRepository->remove($type);
     }
 
 }

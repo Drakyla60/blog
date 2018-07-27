@@ -36,9 +36,9 @@ class PostRepository
      * @param $id
      * @return bool
      */
-    public function existsByBrand($id): bool
+    public function existsByType($id): bool
     {
-        return Post::find()->andWhere(['brand_id' => $id])->exists();
+        return Post::find()->andWhere(['type_id' => $id])->exists();
     }
 
     /**

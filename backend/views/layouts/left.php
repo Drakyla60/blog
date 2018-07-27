@@ -15,8 +15,8 @@
                     ['label' => 'Типи блога', 'icon' => 'book', 'url' => ['#'],
                         'items' => [
 
-                            ['label' => 'Типи', 'icon' => 'book', 'url' => ['/type'],],
-                            ['label' => 'Новий Тип блога', 'icon' => 'book', 'url' => ['/type/create'],],
+                            ['label' => 'Типи', 'icon' => 'book', 'url' => ['/blog/type'],],
+                            ['label' => 'Новий Тип блога', 'icon' => 'book', 'url' => ['/blog/type/create'],],
                         ],
                     ],
 
