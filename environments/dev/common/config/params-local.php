@@ -1,5 +1,8 @@
 <?php
 return [
     'cookieValidationKey' => '',
-    'cookieDomain' => '',
+    'cookieDomain' => '.shop.dev',
+    'frontendHostInfo' => 'http://roma.sss',
+    'backendHostInfo' => 'http://admin.roma.sss',
+    'staticHostInfo' => 'http://files.roma.sss',
 ];

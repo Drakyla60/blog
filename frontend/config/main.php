@@ -14,6 +14,10 @@ return [
 //        'param2' => 'value2',
 //    ],
     'basePath' => dirname(__DIR__),
+    'aliases' => [
+        '@staticRoot' => $params['staticPath'],
+        '@static' => $params['staticHostInfo'],
+    ],
     'bootstrap' => [
         'log',
         'common\bootstrap\SetUp'
