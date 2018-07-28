@@ -11,13 +11,14 @@ namespace core\useServices\manage\Blog;
 use core\entities\Blog\Post\Post;
 use core\entities\Blog\Tag;
 use core\entities\Meta;
+use core\forms\manage\Blog\Post\CategoriesForm;
 use core\forms\manage\Blog\Post\PhotosForm;
 use core\forms\manage\Blog\Post\PostCreateForm;
 use core\forms\manage\Blog\Post\PostEditForm;
-use core\ropositories\Blog\CategoryRepository;
-use core\ropositories\Blog\PostRepository;
-use core\ropositories\Blog\TagRepository;
-use core\ropositories\Blog\TypeRepository;
+use core\repositories\Blog\CategoryRepository;
+use core\repositories\Blog\PostRepository;
+use core\repositories\Blog\TagRepository;
+use core\repositories\Blog\TypeRepository;
 use core\useServices\TransactionManager;
 
 
@@ -117,7 +118,7 @@ class PostManageService
            $this->postRepository->save($post);
         });
 
-        $this->postRepository->save($post);
+        //$this->postRepository->save($post);
 
         return $post;
     }
@@ -144,22 +145,22 @@ class PostManageService
         );
 
         $post->changeMainCategory($category->id);
+        $post->revokeCategories();
+
+        foreach ($postEditForm->categories->others as $otherId) {
+            $category = $this->categoryRepository->get($otherId);
+            $post->assignCategory($category->id);
+        }
+
+        $post->revokeTags();
+
+        foreach ($postEditForm->tags->existing as $tagId) {
+            $tag = $this->tagRepository->get($tagId);
+            $post->assignTag($tag->id);
+        }
 
         $this->transactionManager->wrap(function () use ($post, $postEditForm) {
-
-            $post->revokeCategories();
-            $post->revokeTags();
             $this->postRepository->save($post);
-
-            foreach ($postEditForm->categories->others as $otherId) {
-                $category = $this->categoryRepository->get($otherId);
-                $post->assignCategory($category->id);
-            }
-
-            foreach ($postEditForm->tags->existing as $tagId) {
-                $tag = $this->tagRepository->get($tagId);
-                $post->assignTag($tag->id);
-            }
             foreach ($postEditForm->tags->textNew as $tagName) {
                 if (!$tag = $this->tagRepository->findByName($tagName)) {
                     $tag = Tag::create($tagName, $tagName);
@@ -171,6 +172,22 @@ class PostManageService
         });
     }
 
+    /**
+     * @param $id
+     * @param CategoriesForm $categoriesForm
+     */
+    public function changeCategories($id, CategoriesForm $categoriesForm): void
+    {
+        $post = $this->postRepository->get($id);
+        $category = $this->categoryRepository->get($categoriesForm->main);
+        $post->changeMainCategory($category->id);
+        $post->revokeCategories();
+        foreach ($categoriesForm->others as $otherId) {
+            $category = $this->categoryRepository->get($otherId);
+            $post->assignCategory($category->id);
+        }
+        $this->postRepository->save($post);
+    }
     /**
      * @param $id
      */

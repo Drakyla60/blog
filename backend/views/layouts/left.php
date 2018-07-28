@@ -12,6 +12,12 @@
                     ],
 
                     ['label' => 'Меню Блога', 'options' => ['class' => 'header']],
+                    ['label' => 'Пости блога', 'icon' => 'book', 'url' => ['#'],
+                        'items' => [
+                            ['label' => 'Пости', 'icon' => 'book', 'url' => ['/blog/post'],],
+                            ['label' => 'Новий Пост', 'icon' => 'book', 'url' => ['/blog/post/create'],],
+                        ],
+                    ],
                     ['label' => 'Типи блога', 'icon' => 'book', 'url' => ['#'],
                         'items' => [
                             ['label' => 'Типи', 'icon' => 'book', 'url' => ['/blog/type'],],
