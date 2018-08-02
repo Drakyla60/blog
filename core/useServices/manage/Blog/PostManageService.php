@@ -123,45 +123,46 @@ class PostManageService
         return $post;
     }
 
+
     /**
      * @param $id
-     * @param PostEditForm $postEditForm
+     * @param PostEditForm $form
      * @throws \Throwable
      */
-    public function edit($id, PostEditForm $postEditForm): void
+    public function edit($id, PostEditForm $form): void
     {
         $post = $this->postRepository->get($id);
-        $type = $this->typeRepository->get($postEditForm->typeId);
-        $category = $this->categoryRepository->get($postEditForm->categories->main);
+        $type = $this->typeRepository->get($form->typeId);
+        $category = $this->categoryRepository->get($form->categories->main);
 
         $post->edit(
             $type->id,
-            $postEditForm->name,
+            $form->name,
             new Meta(
-                $postEditForm->meta->title,
-                $postEditForm->meta->description,
-                $postEditForm->meta->keywords
+                $form->meta->title,
+                $form->meta->description,
+                $form->meta->keywords
             )
         );
 
         $post->changeMainCategory($category->id);
-        $post->revokeCategories();
 
-        foreach ($postEditForm->categories->others as $otherId) {
-            $category = $this->categoryRepository->get($otherId);
-            $post->assignCategory($category->id);
-        }
+        $this->transactionManager->wrap(function () use ($post, $form) {
 
-        $post->revokeTags();
+            $post->revokeCategories();
+            $post->revokeTags();
+            $this->postRepository->save($post);
 
-        foreach ($postEditForm->tags->existing as $tagId) {
-            $tag = $this->tagRepository->get($tagId);
-            $post->assignTag($tag->id);
-        }
+            foreach ($form->categories->others as $otherId) {
+                $category = $this->categoryRepository->get($otherId);
+                $post->assignCategory($category->id);
+            }
 
-        $this->transactionManager->wrap(function () use ($post, $postEditForm) {
-            //$this->postRepository->save($post);
-            foreach ($postEditForm->tags->newNames as $tagName) {
+            foreach ($form->tags->existing as $tagId) {
+                $tag = $this->tagRepository->get($tagId);
+                $post->assignTag($tag->id);
+            }
+            foreach ($form->tags->newNames as $tagName) {
                 if (!$tag = $this->tagRepository->findByName($tagName)) {
                     $tag = Tag::create($tagName, $tagName);
                     $this->tagRepository->save($tag);
@@ -203,9 +204,9 @@ class PostManageService
      */
     public function draft($id): void
     {
-        $product = $this->postRepository->get($id);
-        $product->draft();
-        $this->postRepository->save($product);
+        $post = $this->postRepository->get($id);
+        $post->draft();
+        $this->postRepository->save($post);
     }
 
     /**
@@ -214,11 +215,11 @@ class PostManageService
      */
     public function addPhotos($id, PhotosForm $form): void
     {
-        $product = $this->postRepository->get($id);
+        $post = $this->postRepository->get($id);
         foreach ($form->files as $file) {
-            $product->addPhoto($file);
+            $post->addPhoto($file);
         }
-        $this->postRepository->save($product);
+        $this->postRepository->save($post);
     }
 
     /**
@@ -227,9 +228,9 @@ class PostManageService
      */
     public function movePhotoUp($id, $photoId): void
     {
-        $product = $this->postRepository->get($id);
-        $product->movePhotoUp($photoId);
-        $this->postRepository->save($product);
+        $post = $this->postRepository->get($id);
+        $post->movePhotoUp($photoId);
+        $this->postRepository->save($post);
     }
 
     /**
@@ -238,9 +239,9 @@ class PostManageService
      */
     public function movePhotoDown($id, $photoId): void
     {
-        $product = $this->postRepository->get($id);
-        $product->movePhotoDown($photoId);
-        $this->postRepository->save($product);
+        $post = $this->postRepository->get($id);
+        $post->movePhotoDown($photoId);
+        $this->postRepository->save($post);
     }
 
     /**
@@ -249,9 +250,9 @@ class PostManageService
      */
     public function removePhoto($id, $photoId): void
     {
-        $product = $this->postRepository->get($id);
-        $product->removePhoto($photoId);
-        $this->postRepository->save($product);
+        $post = $this->postRepository->get($id);
+        $post->removePhoto($photoId);
+        $this->postRepository->save($post);
     }
     /**
      * @param $id
@@ -260,7 +261,7 @@ class PostManageService
      */
     public function remove($id): void
     {
-        $post =  $this->postRepository->get($id);
+        $post = $this->postRepository->get($id);
         $this->postRepository->remove($post);
     }
 

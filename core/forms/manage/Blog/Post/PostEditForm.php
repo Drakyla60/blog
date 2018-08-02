@@ -19,15 +19,12 @@ use yii\helpers\ArrayHelper;
  * @property MetaForm $meta
  * @property CategoriesForm $categories
  * @property TagsForm $tags
- * @property Type $typeId
- * @property Post $name
  */
 
 class PostEditForm extends CompositeForm
 {
-    /**
-     * @var Post
-     */
+    public $typeId;
+    public $name;
     private $_post;
 
     /**
@@ -37,7 +34,7 @@ class PostEditForm extends CompositeForm
      */
     public function __construct(Post $post, $config = [])
     {
-        $this->typeId = $post->id;
+        $this->typeId = $post->type_id;
         $this->name = $post->name;
         $this->meta = new MetaForm($post->meta);
         $this->categories = new CategoriesForm($post);

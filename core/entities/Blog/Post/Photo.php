@@ -47,7 +47,7 @@ class Photo extends ActiveRecord
      */
     public function isIdEqualTo($id): bool
     {
-        return $this->id === $id;
+        return $this->id == $id;
     }
 
     /**
@@ -70,8 +70,8 @@ class Photo extends ActiveRecord
                 'createThumbsOnRequest' => true,
                 'filePath' => '@staticRoot/origin/post/[[attribute_post_id]]/[[id]].[[extension]]',
                 'fileUrl' => '@static/origin/post/[[attribute_post_id]]/[[id]].[[extension]]',
-                'thumbPath' => '@staticRoot/cache/poss/[[attribute_post_id]]/[[profile]]_[[id]].[[extension]]',
-                'thumbUrl' => '@static/cache/poss/[[attribute_post_id]]/[[profile]]_[[id]].[[extension]]',
+                'thumbPath' => '@staticRoot/cache/post/[[attribute_post_id]]/[[profile]]_[[id]].[[extension]]',
+                'thumbUrl' => '@static/cache/post/[[attribute_post_id]]/[[profile]]_[[id]].[[extension]]',
                 'thumbs' => [
                     'admin' => ['width' => 100, 'height' => 70],
                     'thumb' => ['width' => 640, 'height' => 480],

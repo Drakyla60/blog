@@ -17,7 +17,7 @@ class m180727_154304_add_blog_post_main_photo_field extends Migration
         $this->createIndex('{{%idx-blog_post-main_photo_id}}', '{{%blog_post}}', 'main_photo_id');
 
         $this->addForeignKey('{{%fk-blog_post-main_photo_id}}', '{{%blog_post}}',
-            'main_photo_id', '{{%blog_photos}}', 'photo_id', 'SET NULL', 'RESTRICT');
+            'main_photo_id', '{{%blog_photos}}', 'id', 'SET NULL', 'RESTRICT');
     }
 
     /**

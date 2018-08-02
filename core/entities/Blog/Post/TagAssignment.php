@@ -27,7 +27,6 @@ class TagAssignment extends ActiveRecord
         $assignment->tag_id = $tagId;
         return $assignment;
     }
-
     /**
      * @param $id
      * @return bool

@@ -130,7 +130,7 @@ class PostController extends BasesController
 
     /**
      * @param $id
-     * @return \yii\web\Response
+     * @return string
      * @throws Throwable
      */
     public function actionUpdate($id)
@@ -148,6 +148,11 @@ class PostController extends BasesController
                 Yii::$app->session->setFlash('error', $exception->getMessage());
             }
         }
+
+        return $this->render('update', [
+            'model' => $form,
+            'post' => $post,
+        ]);
     }
 
     /**
