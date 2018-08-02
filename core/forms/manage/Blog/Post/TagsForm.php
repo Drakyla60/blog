@@ -11,11 +11,13 @@ namespace core\forms\manage\Blog\Post;
 
 
 use core\entities\Blog\Post\Post;
+use core\entities\Blog\Tag;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 
 /**
  * Class TagsForm
+ * @property array $newNames
  * @package core\forms\manage\Blog\Post
  */
 class TagsForm extends Model
@@ -49,15 +51,23 @@ class TagsForm extends Model
     {
         return [
             ['existing', 'each', 'rule' => ['integer']],
-            ['textNew', 'string']
+            ['existing', 'default', 'value' => []],
+            ['textNew', 'string'],
         ];
     }
 
     /**
      * @return array
      */
+    public function tagsList(): array
+    {
+        return ArrayHelper::map(Tag::find()->orderBy('name')->asArray()->all(), 'id', 'name');
+    }
+    /**
+     * @return array
+     */
     public function getNewNames(): array
     {
-        return array_map('trim',preg_split('#\s*,\s*#i', $this->textNew));
+        return array_filter(array_map('trim', preg_split('#\s*,\s*#i', $this->textNew)));
     }
 }

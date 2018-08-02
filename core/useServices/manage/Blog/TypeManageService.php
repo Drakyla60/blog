@@ -14,7 +14,7 @@ use core\entities\Blog\Type;
 use core\entities\Meta;
 use core\forms\manage\Blog\TypeForm;
 use core\repositories\Blog\TypeRepository;
-use core\ropositories\Blog\PostRepository;
+use core\repositories\Blog\PostRepository;
 use DomainException;
 
 /**

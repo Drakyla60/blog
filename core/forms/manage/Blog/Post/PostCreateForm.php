@@ -10,15 +10,17 @@
 namespace core\forms\manage\Blog\Post;
 
 
+use core\entities\Blog\Category;
+use core\entities\Blog\Type;
 use core\forms\CompositeForm;
 use core\forms\manage\MetaForm;
+use yii\helpers\ArrayHelper;
 
 /**
  * @property MetaForm meta
  * @property CategoriesForm categories
  * @property PhotosForm photos
  * @property TagsForm tags
- * @property mixed|\yii\base\Model $typeId
  */
 class PostCreateForm extends CompositeForm
 {
@@ -26,10 +28,6 @@ class PostCreateForm extends CompositeForm
      * @var
      */
     public $typeId;
-    /**
-     * @var
-     */
-    public $code;
     /**
      * @var
      */
@@ -58,6 +56,14 @@ class PostCreateForm extends CompositeForm
             [['name'], 'string', 'max' => 255],
             [['typeId'], 'integer'],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function typeList(): array
+    {
+        return ArrayHelper::map(Type::find()->orderBy('name')->asArray()->all(), 'id', 'name');
     }
 
     /**

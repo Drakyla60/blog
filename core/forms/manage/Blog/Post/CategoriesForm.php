@@ -10,6 +10,7 @@
 namespace core\forms\manage\Blog\Post;
 
 
+use core\entities\Blog\Category;
 use core\entities\Blog\Post\Post;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -27,7 +28,7 @@ class CategoriesForm extends Model
     /**
      * @var array
      */
-    public $others =[];
+    public $others = [];
 
     /**
      * CategoriesForm constructor.
@@ -46,12 +47,23 @@ class CategoriesForm extends Model
     /**
      * @return array
      */
+    public function categoriesList(): array
+    {
+        return ArrayHelper::map(Category::find()->andWhere(['>', 'depth', 0])->orderBy('lft')->asArray()->all(), 'id', function (array $category) {
+            return ($category['depth'] > 1 ? str_repeat('-- ', $category['depth'] - 1) . ' ' : '') . $category['name'];
+        });
+    }
+
+    /**
+     * @return array
+     */
     public function rules(): array
     {
         return [
             ['main', 'required'],
             ['main', 'integer'],
             ['others', 'each', 'rule' => ['integer']],
+            ['others', 'default', 'value' => []],
         ];
     }
 }
