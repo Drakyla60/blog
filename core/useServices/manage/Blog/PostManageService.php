@@ -107,8 +107,8 @@ class PostManageService
             $post->assignTag($tag->id);
         }
 
-        $this->transactionManager->wrap(function () use ($postCreateForm, $post) {
-            foreach ($postCreateForm->tags->textNew as $tagName) {
+        $this->transactionManager->wrap(function () use ($post, $postCreateForm) {
+            foreach ($postCreateForm->tags->newNames as $tagName) {
                 if (!$tag = $this->tagRepository->findByName($tagName)) {
                     $tag = Tag::create($tagName, $tagName);
                     $this->tagRepository->save($tag);
@@ -160,8 +160,8 @@ class PostManageService
         }
 
         $this->transactionManager->wrap(function () use ($post, $postEditForm) {
-            $this->postRepository->save($post);
-            foreach ($postEditForm->tags->textNew as $tagName) {
+            //$this->postRepository->save($post);
+            foreach ($postEditForm->tags->newNames as $tagName) {
                 if (!$tag = $this->tagRepository->findByName($tagName)) {
                     $tag = Tag::create($tagName, $tagName);
                     $this->tagRepository->save($tag);

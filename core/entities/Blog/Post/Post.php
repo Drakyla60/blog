@@ -53,6 +53,10 @@ class Post extends ActiveRecord
      *
      */
     const STATUS_ACTIVE = 1;
+    /**
+     * @var
+     */
+    public $meta;
 
     /**
      * @return string
